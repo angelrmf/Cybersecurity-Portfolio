@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>REDTEAM CODEX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="site-title">
+        <span class="title-prefix">// </span>REDTEAM CODEX
+      </div>
+      <div class="header-controls">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle light/dark mode">
+          <span class="theme-icon" id="themeIcon">☀</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav class="main-nav" id="mainNav">
+    <div class="nav-inner">
+      <button class="nav-btn active" data-section="compendium">TECHNIQUE COMPENDIUM</button>
+      <div class="nav-dropdown">
+        <button class="nav-btn dropdown-trigger" id="categoryDropdownBtn">CATEGORIES ▾</button>
+        <div class="dropdown-menu" id="categoryDropdown">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      <button class="nav-btn" data-section="tools">TOOLS & SCRIPTS</button>
+      <button class="nav-btn" data-section="resources">REFERENCES</button>
+    </div>
+  </nav>
+
+  <!-- HERO BANNER -->
+  <section class="hero-banner">
+    <div class="hero-content">
+      <h2 class="hero-headline">TECHNIQUE COMPENDIUM</h2>
+      <p class="hero-sub">Click or tap a technique card to read the full documentation.</p>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="mainContent">
+
+    <!-- SEARCH BAR -->
+    <div class="search-bar-wrap">
+      <input class="search-bar" type="text" id="searchInput" placeholder="Search techniques, tools, CVEs..." />
+      <span class="search-icon">⌕</span>
+    </div>
+
+    <!-- CATEGORIES GRID -->
+    <div id="categorySections">
+      <!-- Populated by data/techniques.js -->
+    </div>
+
+  </main>
+
+  <!-- CARD MODAL -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal-card" id="modalCard">
+      <button class="modal-close" id="modalClose">✕</button>
+      <div class="modal-body" id="modalBody">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="data/techniques.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/nav.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/modal.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

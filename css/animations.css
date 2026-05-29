@@ -1,1 +1,54 @@
+/* ============================================
+   ANIMATIONS.CSS — Motion & Transitions
+   ============================================ */
 
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.category-section {
+  animation: fadeInUp 0.4s ease both;
+}
+
+.category-section:nth-child(2) { animation-delay: 0.05s; }
+.category-section:nth-child(3) { animation-delay: 0.10s; }
+.category-section:nth-child(4) { animation-delay: 0.15s; }
+.category-section:nth-child(5) { animation-delay: 0.20s; }
+
+.technique-card {
+  animation: fadeInUp 0.35s ease both;
+}
+
+/* Stagger cards within grid */
+.cards-grid .technique-card:nth-child(1)  { animation-delay: 0.02s; }
+.cards-grid .technique-card:nth-child(2)  { animation-delay: 0.04s; }
+.cards-grid .technique-card:nth-child(3)  { animation-delay: 0.06s; }
+.cards-grid .technique-card:nth-child(4)  { animation-delay: 0.08s; }
+.cards-grid .technique-card:nth-child(5)  { animation-delay: 0.10s; }
+.cards-grid .technique-card:nth-child(6)  { animation-delay: 0.12s; }
+.cards-grid .technique-card:nth-child(7)  { animation-delay: 0.14s; }
+.cards-grid .technique-card:nth-child(8)  { animation-delay: 0.16s; }
+
+.hero-headline {
+  animation: slideInLeft 0.5s ease both;
+}
+
+.hero-sub {
+  animation: fadeInUp 0.5s 0.15s ease both;
+}
+
+/* Theme transition */
+body, .site-header, .main-nav, .technique-card, .modal-card, .search-bar {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

@@ -1,1 +1,97 @@
+/* ============================================
+   THEME.CSS — CSS Variables & Color System
+   ============================================ */
 
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Share+Tech+Mono&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* ----------- DARK THEME (default) ----------- */
+[data-theme="dark"] {
+  --bg-primary:      #0d0d0d;
+  --bg-secondary:    #141414;
+  --bg-card:         #1a1a1a;
+  --bg-nav:          #111111;
+  --bg-header:       #ffffff;
+  --bg-banner:       #1c1c1c;
+
+  --text-primary:    #f0ece3;
+  --text-secondary:  #9a9a9a;
+  --text-accent:     #00ff88;
+  --text-header:     #0d0d0d;
+  --text-muted:      #555555;
+
+  --border-primary:  #2a2a2a;
+  --border-accent:   #00ff88;
+  --border-subtle:   #222222;
+
+  --accent:          #00ff88;
+  --accent-dim:      rgba(0, 255, 136, 0.12);
+  --accent-glow:     rgba(0, 255, 136, 0.25);
+
+  --tag-bg:          #1f1f1f;
+  --tag-text:        #777;
+
+  --modal-bg:        #161616;
+  --modal-overlay:   rgba(0, 0, 0, 0.88);
+
+  --shadow-card:     0 4px 24px rgba(0,0,0,0.6);
+  --shadow-hover:    0 8px 40px rgba(0, 255, 136, 0.15);
+}
+
+/* ----------- LIGHT THEME ----------- */
+[data-theme="light"] {
+  --bg-primary:      #f5f2ec;
+  --bg-secondary:    #ede9e0;
+  --bg-card:         #ffffff;
+  --bg-nav:          #1c1c1c;
+  --bg-header:       #ffffff;
+  --bg-banner:       #1c1c1c;
+
+  --text-primary:    #111111;
+  --text-secondary:  #555555;
+  --text-accent:     #005c30;
+  --text-header:     #111111;
+  --text-muted:      #999999;
+
+  --border-primary:  #ddd8cc;
+  --border-accent:   #005c30;
+  --border-subtle:   #e8e3d9;
+
+  --accent:          #005c30;
+  --accent-dim:      rgba(0, 92, 48, 0.08);
+  --accent-glow:     rgba(0, 92, 48, 0.15);
+
+  --tag-bg:          #ede9e0;
+  --tag-text:        #666;
+
+  --modal-bg:        #faf8f4;
+  --modal-overlay:   rgba(0, 0, 0, 0.55);
+
+  --shadow-card:     0 2px 16px rgba(0,0,0,0.08);
+  --shadow-hover:    0 6px 32px rgba(0, 92, 48, 0.15);
+}
+
+/* ----------- BASE RESET ----------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+}
+
+::selection {
+  background: var(--accent);
+  color: #000;
+}

@@ -1,1 +1,230 @@
+/* ============================================
+   LAYOUT.CSS — Page Structure & Grid
+   ============================================ */
 
+/* ----------- HEADER ----------- */
+.site-header {
+  background: var(--bg-header);
+  border-bottom: 3px solid var(--text-header);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  transition: background 0.3s ease;
+}
+
+.header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 18px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(24px, 4vw, 38px);
+  letter-spacing: 0.06em;
+  color: var(--text-header);
+  line-height: 1;
+}
+
+.title-prefix {
+  color: var(--accent);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7em;
+}
+
+[data-theme="light"] .title-prefix { color: var(--accent); }
+
+/* ----------- NAV ----------- */
+.main-nav {
+  background: var(--bg-nav);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: sticky;
+  top: 65px;
+  z-index: 90;
+}
+
+.nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+/* ----------- HERO BANNER ----------- */
+.hero-banner {
+  background: var(--bg-banner);
+  border-bottom: 1px solid var(--border-primary);
+  padding: 52px 32px 40px;
+}
+
+.hero-content {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.hero-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(32px, 6vw, 64px);
+  letter-spacing: 0.05em;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.hero-sub {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 13px;
+  color: #777;
+  letter-spacing: 0.04em;
+}
+
+[data-theme="light"] .hero-banner { background: var(--bg-banner); }
+[data-theme="light"] .hero-headline { color: #fff; }
+
+/* ----------- MAIN CONTENT ----------- */
+.main-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+
+/* ----------- SEARCH ----------- */
+.search-bar-wrap {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.search-bar {
+  width: 100%;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-left: 3px solid var(--accent);
+  color: var(--text-primary);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 14px;
+  padding: 14px 48px 14px 20px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  letter-spacing: 0.04em;
+}
+
+.search-bar:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-dim);
+}
+
+.search-bar::placeholder { color: var(--text-muted); }
+
+.search-icon {
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 20px;
+  pointer-events: none;
+}
+
+/* ----------- CATEGORY SECTION ----------- */
+.category-section {
+  margin-bottom: 56px;
+}
+
+.category-header {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-primary);
+  border-left: 4px solid var(--accent);
+  padding: 14px 24px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.category-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+}
+
+.category-count {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+}
+
+/* ----------- ROLE SUBSECTION ----------- */
+.role-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.role-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border-subtle);
+}
+
+/* ----------- CARDS GRID ----------- */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+/* ----------- MODAL ----------- */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: var(--modal-overlay);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(4px);
+}
+
+.modal-overlay.open { display: flex; }
+
+.modal-card {
+  background: var(--modal-bg);
+  border: 1px solid var(--border-primary);
+  border-top: 3px solid var(--accent);
+  max-width: 700px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: var(--shadow-card);
+  animation: modalIn 0.22s ease;
+}
+
+/* ----------- RESPONSIVE ----------- */
+@media (max-width: 768px) {
+  .header-inner,
+  .nav-inner,
+  .hero-content,
+  .main-content { padding-left: 16px; padding-right: 16px; }
+
+  .cards-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+
+  .main-nav { top: 57px; }
+}

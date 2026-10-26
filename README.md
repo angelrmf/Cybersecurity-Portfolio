@@ -20,7 +20,7 @@ A modular, static GitHub Pages site for documenting pentesting techniques, tools
 │   ├── search.js           ← Live search/filter
 │   └── app.js              ← Entry point
 ├── data/
-│   └── techniques.js       ← ⭐ YOUR DATA — add all techniques here
+│   └── techniques.js       ← all techniques here
 └── assets/
     └── images/             ← Drop card images here (optional)
 ```

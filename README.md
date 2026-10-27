@@ -9,8 +9,6 @@ A professional portfolio and knowledge base for cybersecurity research, offensiv
 
 This project serves as a centralized documentation hub for:
 
-- Red team and offensive security techniques
-- Security tooling and script references
 - Enumeration, exploitation, and post-exploitation notes
 - CTF writeups and walkthroughs
 - General cybersecurity research and portfolio documentation

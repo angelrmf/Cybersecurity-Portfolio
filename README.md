@@ -50,74 +50,7 @@ The site is intentionally lightweight and easy to maintain: it is built with pla
 └── assets/                 # Optional images and supporting media
 ```
 
-## How to Use
 
-### Local Preview
-
-Open `index.html` directly in a browser, or serve the repository locally with a simple web server:
-
-```bash
-python3 -m http.server 8000
-```
-
-Then visit:
-
-```text
-http://localhost:8000
-```
-
-### GitHub Pages Deployment
-
-1. Push the repository to GitHub.
-2. Open the repository settings.
-3. Navigate to Pages.
-4. Select the root branch (for example, `main`) as the deployment source.
-5. Save the configuration.
-
-The site will be available at:
-
-```text
-https://<username>.github.io/<repository-name>/
-```
-
-## Adding Content
-
-The main content is defined in `data/techniques.js`. Each technique entry includes metadata such as the title, severity, tags, summary, and notes. This makes it easy to extend the portfolio with new offensive techniques, tools, and references.
-
-Example structure:
-
-```js
-{
-  id: "web-sqli",
-  name: "SQL INJECTION",
-  alias: "SQLi",
-  tags: ["Injection", "DB"],
-  severity: "critical",
-  summary: "Description shown in the modal.",
-  notes: "sqlmap -u ...\npayload...",
-  link: "https://owasp.org/",
-  group: "Injection"
-}
-```
-
-## Security Notice
-
-This repository is intended for educational and professional documentation purposes. All content should be used responsibly and in accordance with applicable laws, ethical standards, and organizational policies.
-
-## License
-
-This project is provided as an open educational resource for cybersecurity research and portfolio documentation. Please review the repository policies and use the content responsibly.
-
-## Contributing
-
-Contributions are welcome for:
-
-- New technique entries
-- Improved documentation
-- Better categorization and navigation
-- UX or styling enhancements
-
-If you want to add content, keep it structured, clearly labeled, and aligned with the existing portfolio format.
 
 ## Contact
 

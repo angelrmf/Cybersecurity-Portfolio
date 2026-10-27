@@ -19,13 +19,13 @@ level yields a password used to authenticate into the next.
 
 | Level | Theme | Core skill | Status | Flag |
 |-------|-------|-----------|--------|------|
-| 0 → 1 | Orientation | File reading / recon | ✅ Complete | `W3lc0m3T0Gh0st` |
-| 1 → 2 | Dash Is Not A Flag | Filenames that collide with shell syntax | ✅ Complete | `D4shIsN0tAFl4g` |
-| 2 → 3 | Hidden In Shadow | Hidden files / dotfiles | ✅ Complete | `H1dd3nInSh4dow` |
-| 3 → 4 | Permissions Matter | Special filenames & permissions | ✅ Complete | `P3rm1ss10ns_M4tt3r` |
-| 4 → 5 | Grep Finds Truth | Pattern-based text filtering | ✅ Complete | `Gr3p_F1nds_Truth` |
-| 5 → 6 | Ports Never Lie | Port discovery & raw interaction (netcat) | ✅ Complete | `P0rts_N3v3r_L13` |
-| 6 → 7 | Ghost in the Machine | Secrets in memory (history / process env) | 🔄 In progress | — |
+| 0 → 1 | Orientation | File reading / recon |  Complete | `W3lc0m3T0Gh0st` |
+| 1 → 2 | Dash Is Not A Flag | Filenames that collide with shell syntax |  Complete | `D4shIsN0tAFl4g` |
+| 2 → 3 | Hidden In Shadow | Hidden files / dotfiles |  Complete | `H1dd3nInSh4dow` |
+| 3 → 4 | Permissions Matter | Special filenames & permissions |  Complete | `P3rm1ss10ns_M4tt3r` |
+| 4 → 5 | Grep Finds Truth | Pattern-based text filtering |  Complete | `Gr3p_F1nds_Truth` |
+| 5 → 6 | Ports Never Lie | Port discovery & raw interaction (netcat) |  Complete | `P0rts_N3v3r_L13` |
+| 6 → 7 | Ghost in the Machine | Secrets in memory (history / process env) |  In progress | — |
 
 ---
 

@@ -1,69 +1,130 @@
-# REDTEAM CODEX
+# Cybersecurity Portfolio
 
-A modular, static GitHub Pages site for documenting pentesting techniques, tools, and references.
+A professional portfolio and knowledge base for cybersecurity research, offensive tradecraft, and technical documentation. This repository hosts a static GitHub Pages site that organizes techniques, tools, references, and notes in a clean, searchable format.
 
-## File Structure
+[![GitHub Pages](https://img.shields.io/badge/Hosted-GitHub%20Pages-blue?logo=github)](https://pages.github.com/)
+[![License](https://img.shields.io/badge/License-Open%20Project-green)](#license)
 
-```
-/
-├── index.html              ← Main page
-├── css/
-│   ├── theme.css           ← CSS variables & dark/light mode
-│   ├── layout.css          ← Page structure (header, nav, grid)
-│   ├── components.css      ← Cards, modal, buttons, tags
-│   └── animations.css      ← Motion & transitions
-├── js/
-│   ├── theme.js            ← Dark/light toggle (persists to localStorage)
-│   ├── nav.js              ← Navigation & category dropdown
-│   ├── render.js           ← Renders cards/sections from data
-│   ├── modal.js            ← Detail modal logic
-│   ├── search.js           ← Live search/filter
-│   └── app.js              ← Entry point
+## Overview
+
+This project serves as a centralized documentation hub for:
+
+- Red team and offensive security techniques
+- Security tooling and script references
+- Enumeration, exploitation, and post-exploitation notes
+- CTF writeups and walkthroughs
+- General cybersecurity research and portfolio documentation
+
+The site is intentionally lightweight and easy to maintain: it is built with plain HTML, CSS, and JavaScript, making it ideal for static hosting on GitHub Pages without a build pipeline.
+
+## Features
+
+- Clean, dark-themed cybersecurity aesthetic
+- Searchable technique catalog
+- Sectioned content for tools, references, and walkthroughs
+- Expandable, card-based layout for easy browsing
+- Responsive design for desktop and mobile viewing
+- Zero dependency setup for GitHub Pages deployment
+
+## Repository Structure
+
+```text
+.
+├── index.html              # Main landing page
+├── README.md               # Project overview and usage guide
+├── SECURITY.md             # Security policy and reporting guidance
+├── css/                    # Styling and layout assets
+│   ├── animations.css
+│   ├── components.css
+│   ├── layout.css
+│   └── theme.css
+├── js/                     # Front-end behavior and rendering logic
+│   ├── app.js
+│   ├── modal.js
+│   ├── nav.js
+│   ├── render.js
+│   ├── search.js
+│   └── theme.js
 ├── data/
-│   └── techniques.js       ← all techniques here
-└── assets/
-    └── images/             ← Drop card images here (optional)
+│   └── techniques.js       # Technique entries and metadata
+├── CTF/                    # CTF-related content and notes
+├── sherlocks/              # Research or investigation notes
+└── assets/                 # Optional images and supporting media
 ```
 
-## Adding Techniques
+## How to Use
 
-Edit `data/techniques.js`. Each **category** looks like:
+### Local Preview
+
+Open `index.html` directly in a browser, or serve the repository locally with a simple web server:
+
+```bash
+python3 -m http.server 8000
+```
+
+Then visit:
+
+```text
+http://localhost:8000
+```
+
+### GitHub Pages Deployment
+
+1. Push the repository to GitHub.
+2. Open the repository settings.
+3. Navigate to Pages.
+4. Select the root branch (for example, `main`) as the deployment source.
+5. Save the configuration.
+
+The site will be available at:
+
+```text
+https://<username>.github.io/<repository-name>/
+```
+
+## Adding Content
+
+The main content is defined in `data/techniques.js`. Each technique entry includes metadata such as the title, severity, tags, summary, and notes. This makes it easy to extend the portfolio with new offensive techniques, tools, and references.
+
+Example structure:
 
 ```js
 {
-  id: "webapp",           // unique slug, used for anchor links
-  name: "WEB APPLICATION", // displayed as section header
-  entries: [
-    {
-      id: "web-sqli",           // unique entry id
-      name: "SQL INJECTION",    // card title
-      alias: "SQLi",            // subtitle / CVE / tool name
-      tags: ["Injection", "DB"],
-      severity: "critical",     // critical | high | medium | low | info
-      image: "assets/images/sqli.jpg",  // optional
-      summary: "Description shown in modal...",
-      notes: "sqlmap -u ...\npayload...",  // commands/snippets
-      link: "https://owasp.org/...",       // optional external link
-      group: "Injection"        // sub-group label within category (optional)
-    }
-  ]
+  id: "web-sqli",
+  name: "SQL INJECTION",
+  alias: "SQLi",
+  tags: ["Injection", "DB"],
+  severity: "critical",
+  summary: "Description shown in the modal.",
+  notes: "sqlmap -u ...\npayload...",
+  link: "https://owasp.org/",
+  group: "Injection"
 }
 ```
 
-## Severity Tags
+## Security Notice
 
-| Value      | Color   |
-|------------|---------|
-| `critical` | Red     |
-| `high`     | Orange  |
-| `medium`   | Yellow  |
-| `low`      | Green   |
-| `info`     | Blue    |
+This repository is intended for educational and professional documentation purposes. All content should be used responsibly and in accordance with applicable laws, ethical standards, and organizational policies.
 
-## GitHub Pages
+## License
 
-1. Push the repo.
-2. Go to **Settings → Pages → Source → main / root**.
-3. Your site is live at `https://<username>.github.io/<repo>/`.
+This project is provided as an open educational resource for cybersecurity research and portfolio documentation. Please review the repository policies and use the content responsibly.
 
-No build step required — pure HTML/CSS/JS.
+## Contributing
+
+Contributions are welcome for:
+
+- New technique entries
+- Improved documentation
+- Better categorization and navigation
+- UX or styling enhancements
+
+If you want to add content, keep it structured, clearly labeled, and aligned with the existing portfolio format.
+
+## Contact
+
+For questions, collaboration opportunities, or professional inquiries, please reach out through the repository's contact channels or GitHub profile associated with this project.
+
+---
+
+Built for knowledge-sharing, research, and a professional cybersecurity portfolio.

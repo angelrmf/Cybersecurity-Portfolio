@@ -24,6 +24,25 @@ The site is intentionally lightweight and easy to maintain: it is built with pla
 - Responsive design for desktop and mobile viewing
 - Zero dependency setup for GitHub Pages deployment
 
+## Adding a write-up
+
+Drop the `.md` file into `CTF/`, `sherlocks/` or `malware-analysis/` and push. A GitHub Action (`.github/workflows/manifest.yml`) scans the folders and rebuilds `data/writeups.js`, so the site picks the file up by itself. Do not edit `data/writeups.js` by hand.
+
+The title, platform, summary and status are guessed from the file. To set them yourself, put this at the very top of the `.md` file (the site hides it when it shows the write-up):
+
+```text
+---
+title: Cap
+platform: Hack The Box
+level: Easy
+status: complete
+tags: IDOR, pcap, Linux capabilities
+summary: One sentence for the list page.
+---
+```
+
+You can also set these fields in `data/writeup-meta.json`, keyed by file path. Files under 600 bytes are treated as "in progress" until you write more. To rebuild the list locally, run `python3 scripts/build_manifest.py`.
+
 ## Repository Structure
 
 ```text

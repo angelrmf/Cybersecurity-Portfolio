@@ -79,15 +79,31 @@ const WRITEUPS = [
     path: "sherlocks/THM/soc_simulator.md", level: "SOC triage", status: "complete",
     tags: ["phishing", "alert triage", "incident report"],
     summary: "Working alerts as a SOC analyst: true or false positive, correlation across sources, escalation and case reports."
+  },
+  {
+    section: "sherlocks", platform: "Hack The Box", title: "Brutus",
+    path: "sherlocks/htb/brutus.md", level: "Easy", status: "complete",
+    tags: ["auth.log", "wtmp", "SSH brute force", "persistence"],
+    summary: "Linux log forensics: an SSH brute force that lands root, a backdoor account added afterwards and a persistence script pulled from GitHub."
+  },
+  {
+    section: "sherlocks", platform: "Hack The Box", title: "Unit42",
+    path: "sherlocks/htb/Unit42_notes.md", level: "Easy", status: "complete",
+    tags: ["Sysmon", "Windows", "timestomping", "jq"],
+    summary: "Sysmon log analysis of a malicious executable downloaded from Dropbox, including its connectivity check and timestomping."
   }
 
-  /* ---------- MALWARE ANALYSIS ----------
-     Nothing yet. Example entry:
+  /* ---------- MALWARE ANALYSIS ---------- */
   ,{
-    section: "malware", platform: "MalwareBazaar", title: "Sample name",
-    path: "malware/sample-name.md", level: "Static analysis", status: "complete",
-    tags: ["PE", "strings", "YARA"],
-    summary: "One sentence on what the sample does and how you took it apart."
+    section: "malware", platform: "Linux binary", title: "Phantom ring",
+    path: "malware-analysis/phantom_ring/analysis.md", level: "Static analysis", status: "in progress",
+    tags: ["ELF", "static analysis", "IOCs"],
+    summary: "Static analysis of a suspicious Linux binary found in /var/tmp that was making outbound connections. Only the briefing is written so far."
+  },
+  {
+    section: "malware", platform: "Crackme", title: "Crackme sample 1",
+    path: "malware-analysis/crackme-sample-1/documentation.md", level: "Reverse engineering", status: "in progress",
+    tags: ["crackme", "reversing"],
+    summary: "Notes for the first crackme sample. The write-up has just been started."
   }
-  */
 ];

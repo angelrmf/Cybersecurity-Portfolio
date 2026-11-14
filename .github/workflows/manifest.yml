@@ -1,1 +1,34 @@
+name: Update write-up list
 
+on:
+  push:
+    branches: [main]
+    paths:
+      - "CTF/**"
+      - "sherlocks/**"
+      - "malware/**"
+      - "malware-analysis/**"
+      - "data/writeup-meta.json"
+      - "scripts/build_manifest.py"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rebuild data/writeups.js
+        run: python3 scripts/build_manifest.py
+      - name: Commit if it changed
+        run: |
+          if git diff --quiet data/writeups.js; then
+            echo "List already up to date."
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add data/writeups.js
+            git commit -m "Update write-up list"
+            git push
+          fi

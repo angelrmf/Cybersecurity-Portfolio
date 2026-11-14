@@ -1,0 +1,76 @@
+name: Write-up from issue form
+
+# When the repo owner submits (or edits) one of the write-up issue forms, this
+# writes the markdown file into the right folder, rebuilds the site's list and
+# opens a pull request. Merging the pull request publishes the write-up.
+
+on:
+  issues:
+    types: [opened, edited]
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+concurrency:
+  group: writeup-issue-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    # Only the repo owner's issues are acted on. Anyone else's are ignored.
+    if: github.event.issue.user.login == github.repository_owner && github.event.issue.state == 'open'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ISSUE: ${{ github.event.issue.number }}
+      BASE: ${{ github.event.repository.default_branch }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Write the markdown file
+        id: make
+        run: python3 scripts/issue_to_writeup.py
+
+      - name: Rebuild the site's write-up list
+        if: steps.make.outputs.skip != 'true'
+        run: python3 scripts/build_manifest.py
+
+      - name: Open or update the pull request
+        if: steps.make.outputs.skip != 'true'
+        env:
+          TITLE: ${{ steps.make.outputs.title }}
+          FILE: ${{ steps.make.outputs.path }}
+          MODE: ${{ steps.make.outputs.mode }}
+        run: |
+          BRANCH="writeup/issue-$ISSUE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add -A
+          if git diff --cached --quiet; then
+            gh issue comment "$ISSUE" --body "The form matches what is already published in \`$FILE\`, so there is nothing to change."
+            exit 0
+          fi
+          git commit -m "$MODE write-up: $TITLE"
+          git push --force origin "$BRANCH"
+
+          PR=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url // empty')
+          if [ -n "$PR" ]; then
+            gh issue comment "$ISSUE" --body "Updated the pull request with your edit: $PR"
+          else
+            PR=$(gh pr create --base "$BASE" --head "$BRANCH" \
+              --title "$MODE write-up: $TITLE" \
+              --body "Created from the form in #$ISSUE. File: \`$FILE\`. Merging this publishes it on the site. Closes #$ISSUE")
+            gh issue comment "$ISSUE" --body "Pull request ready: $PR. File: \`$FILE\`. Merge it to publish. To change something first, edit this issue and the pull request updates itself."
+          fi
+
+      - name: Report a problem on the issue
+        if: failure()
+        run: |
+          if [ -s "$RUNNER_TEMP/writeup_error.txt" ]; then
+            gh issue comment "$ISSUE" --body-file "$RUNNER_TEMP/writeup_error.txt"
+          else
+            gh issue comment "$ISSUE" --body "The write-up could not be turned into a pull request. Open the Actions tab and read the latest \"Write-up from issue form\" run for the reason."
+          fi

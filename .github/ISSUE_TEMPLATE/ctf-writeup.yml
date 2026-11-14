@@ -1,0 +1,115 @@
+name: CTF write-up
+description: Add or update a CTF write-up. Submitting opens a pull request with the file in CTF/.
+title: "CTF: "
+body:
+  - type: dropdown
+    id: section
+    attributes:
+      label: Section
+      description: Decides which folder the write-up goes into. Leave as it is.
+      options:
+        - CTF
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: case
+    attributes:
+      label: Case name
+      description: The title shown on the site. A folder is named after it.
+      placeholder: "Cap"
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Hack The Box
+        - TryHackMe
+        - Root-Me
+        - BreachLab
+        - OverTheWire
+        - picoCTF
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: other_platform
+    attributes:
+      label: Other platform
+      description: Only if you picked "Other" above.
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Difficulty
+      options:
+        - Very Easy
+        - Easy
+        - Medium
+        - Hard
+        - Insane
+        - Not rated
+    validations:
+      required: true
+  - type: dropdown
+    id: status
+    attributes:
+      label: Status
+      options:
+        - complete
+        - in progress
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: tags
+    attributes:
+      label: Tags
+      description: Separate them with commas.
+      placeholder: "IDOR, pcap, Linux capabilities"
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: One sentence. It is shown under the title in the list on the site.
+      placeholder: "An IDOR exposes a packet capture with credentials, then a Linux capability gives root."
+    validations:
+      required: true
+  - type: input
+    id: replace
+    attributes:
+      label: Existing file to replace
+      description: Leave empty for a new write-up. To edit one that is already published, paste its path exactly as it is in the repo, then paste the full updated text below.
+      placeholder: "CTF/HTB/Easy/cap.md"
+  - type: textarea
+    id: writeup
+    attributes:
+      label: Write-up
+      description: Markdown. Drag screenshots straight into this box to attach them.
+      value: |
+        ## Overview
+
+        What the box or challenge is, and the path to the flag in two or three sentences.
+
+        ## Reconnaissance
+
+        ```bash
+        nmap -sC -sV -oN scan.txt TARGET
+        ```
+
+        What the scan showed and what you decided to look at first.
+
+        ## Foothold
+
+        The vulnerability, how you found it and how you used it.
+
+        ## Privilege escalation
+
+        What you enumerated and what got you root.
+
+        ## Lessons learned
+
+        -
+    validations:
+      required: true

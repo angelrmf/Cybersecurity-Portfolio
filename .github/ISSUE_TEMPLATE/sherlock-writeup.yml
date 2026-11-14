@@ -1,0 +1,117 @@
+name: Sherlock write-up
+description: Add or update a blue-team investigation. Submitting opens a pull request with the file in sherlocks/.
+title: "Sherlock: "
+body:
+  - type: dropdown
+    id: section
+    attributes:
+      label: Section
+      description: Decides which folder the write-up goes into. Leave as it is.
+      options:
+        - Sherlock
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: case
+    attributes:
+      label: Case name
+      description: The title shown on the site. A folder is named after it.
+      placeholder: "Brutus"
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform
+      options:
+        - Hack The Box
+        - TryHackMe
+        - CyberDefenders
+        - LetsDefend
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: other_platform
+    attributes:
+      label: Other platform
+      description: Only if you picked "Other" above.
+  - type: dropdown
+    id: difficulty
+    attributes:
+      label: Difficulty
+      options:
+        - Very Easy
+        - Easy
+        - Medium
+        - Hard
+        - Insane
+        - Not rated
+    validations:
+      required: true
+  - type: dropdown
+    id: status
+    attributes:
+      label: Status
+      options:
+        - complete
+        - in progress
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: tags
+    attributes:
+      label: Tags
+      description: Separate them with commas.
+      placeholder: "auth.log, wtmp, SSH brute force"
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: One sentence. It is shown under the title in the list on the site.
+      placeholder: "Linux log forensics on an SSH brute force that ends with a backdoor account."
+    validations:
+      required: true
+  - type: input
+    id: replace
+    attributes:
+      label: Existing file to replace
+      description: Leave empty for a new write-up. To edit one that is already published, paste its path exactly as it is in the repo, then paste the full updated text below.
+      placeholder: "sherlocks/htb/brutus.md"
+  - type: textarea
+    id: writeup
+    attributes:
+      label: Write-up
+      description: Markdown. Drag screenshots straight into this box to attach them.
+      value: |
+        ## Scenario
+
+        What happened according to the brief, and which artifacts you were given.
+
+        ## Key facts at a glance
+
+        | Item | Value |
+        |---|---|
+        |  |  |
+
+        ## Analysis
+
+        The artifacts you read, the queries or commands you ran, and what each one showed.
+
+        ## Timeline
+
+        | Time (UTC) | Event |
+        |---|---|
+        |  |  |
+
+        ## Questions and answers
+
+        1.
+
+        ## Lessons learned
+
+        -
+    validations:
+      required: true

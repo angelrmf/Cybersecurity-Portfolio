@@ -1,0 +1,35 @@
+/* ============================================
+   EFFECTS.CSS — the pixel layer and cursor readout
+   (everything here is decorative and switches off
+   with the "Effects" button or reduced-motion)
+   ============================================ */
+
+#fx {
+  position: fixed; inset: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 200;
+}
+
+#profiler {
+  position: fixed; left: 0; top: 0;
+  z-index: 201;
+  pointer-events: none;
+  font-family: var(--font-pixel);
+  font-size: 1.1rem;
+  line-height: 1;
+  white-space: nowrap;
+  padding: .25rem .45rem;
+  background: var(--ink);
+  color: var(--bg);
+  opacity: 0;
+  will-change: transform;
+}
+#profiler.on  { opacity: 1; }
+#profiler.hit { background: var(--magenta); color: #000; }
+
+.fx-off #fx, .fx-off #profiler { display: none; }
+
+@media (hover: none), (pointer: coarse) {
+  #profiler { display: none; }
+}

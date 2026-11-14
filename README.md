@@ -43,6 +43,19 @@ summary: One sentence for the list page.
 
 You can also set these fields in `data/writeup-meta.json`, keyed by file path. Files under 600 bytes are treated as "in progress" until you write more. To rebuild the list locally, run `python3 scripts/build_manifest.py`.
 
+## Submitting a write-up with a form
+
+Instead of committing a file, open the repo's **Issues** tab, click **New issue** and pick the CTF, Sherlock or Malware analysis form. Fill it in and submit. A GitHub Action (`.github/workflows/writeup-from-issue.yml`) then:
+
+1. writes the markdown file into the right folder, in a new folder named after the case
+   (`CTF/<platform>/<case>/README.md`, `sherlocks/<platform>/<case>/README.md` or `malware-analysis/<case>/README.md`),
+2. rebuilds `data/writeups.js`,
+3. opens a pull request and links it on the issue.
+
+Merging the pull request publishes the write-up and closes the issue. To change something before merging, edit the issue and the pull request updates itself. To edit a write-up that is already published, fill in "Existing file to replace" with its path and paste the full updated text.
+
+Only issues opened by the repo owner are acted on.
+
 ## Repository Structure
 
 ```text

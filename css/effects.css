@@ -33,3 +33,15 @@
 @media (hover: none), (pointer: coarse) {
   #profiler { display: none; }
 }
+
+/* ----------- AMBIENT BACKGROUND (js/bg.js) ----------- */
+#bg {
+  position: fixed; inset: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Page content sits above the background layer. */
+#view, .foot { position: relative; z-index: 1; }
+
+.fx-off #bg { display: none; }

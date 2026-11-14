@@ -206,7 +206,7 @@
       if (!res.ok) throw new Error(res.status);
       const md = await res.text();
       if (!prose.isConnected) return;                        // visitor already moved on
-      prose.innerHTML = marked.parse(md);
+      prose.innerHTML = marked.parse(md.replace(/^\uFEFF?---\s*\n[\s\S]*?\n---\s*(?:\n|$)/, ''));   // hide optional front matter
     } catch (err) {
       prose.innerHTML = `<div class="empty"><strong>This write-up didn't load.</strong>
         Read it <a href="${REPO}/blob/main/${esc(w.path)}" target="_blank" rel="noopener">on GitHub</a> instead, or reload the page to try again.</div>`;

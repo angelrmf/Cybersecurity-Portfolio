@@ -1,30 +1,21 @@
-/* ============================================
-   data/whoami.js — the whoami page
-   ─────────────────────────────────────────
-   Replace the [bracketed] placeholders with your own text.
-   Leave email or linkedin as "" to show a placeholder instead of a link.
-
-   The ASCII portrait is in data/whoami.txt (taken from the
-   card on github.com/angelrmf). Replace that file to change it.
-   ============================================ */
 
 const WHOAMI = {
   handle: "angelrmf",
 
   // Shown in the info panel next to the portrait.
-  role:     "[Your role, for example: Junior SOC analyst]",
-  focus:    "[What you work on, for example: DFIR, threat hunting, CTFs]",
-  location: "[City, country]",
-  learning: "[What you are studying right now]",
+  role:     "Intern cybersecurity analyst",
+  focus:    "DFIR, SOC, CTFs and learning networking",
+  hobbies: "Videogames, cinema and music",
+  learning: "Finishing up my masters and getting certs :)",
 
   // Contact. Email is public once filled in; use an address you are happy to share.
-  email:    "",                                 // for example "you@example.com"
-  linkedin: "",                                 // full link: "https://www.linkedin.com/in/your-name"
+  email:    "angel.r.m.f1999@gmail.com",                                 
+  linkedin: "www.linkedin.com/in/angel-rodrigo-martinez-fernandez-483095357",                                 
   github:   "https://github.com/angelrmf",
 
   // About: one string per paragraph.
   about: [
-    "[A short paragraph about who you are and how you got into security.]",
-    "[A second paragraph about what you are looking for: a role, projects, collaboration.]"
+    "Security studies graduate, that focuses on cybersecurity, always curious about tech.",
+    "Looking to improve my projects and keep on expanding my knowledge on cyber."
   ]
 };

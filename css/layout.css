@@ -43,6 +43,7 @@
 .nav a[data-nav="sherlocks"][aria-current="page"]  { background: var(--cyan); }
 .nav a[data-nav="malware"][aria-current="page"]    { background: var(--yellow); }
 .nav a[data-nav="tools"][aria-current="page"],
+.nav a[data-nav="whoami"][aria-current="page"],
 .nav a[data-nav="techniques"][aria-current="page"] { background: var(--ink); color: var(--bg); }
 
 .controls { display: flex; gap: .5rem; }

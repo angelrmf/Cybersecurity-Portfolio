@@ -35,7 +35,7 @@
   // Page elements the background must stay clear of.
   const SOLID = '.hero-name, .hero-line, .hero-hint, .block, .strip, .page-title, .page-lede, .tools, ' +
                 '.rows, .tech-cat, .back, .read-head, .prose, .empty, .foot, .phase-bar, .legend, .matrix, ' +
-                '.tlist, .t-desc, .t-plat, .t-source';
+                '.tlist, .t-desc, .t-plat, .t-source, .who-prompt, .who-art, .who-card, .who-about';
 
   const LINES = [
     'nmap -sC -sV -p- 10.129.0.0',

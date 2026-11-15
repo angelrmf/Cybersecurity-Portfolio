@@ -95,6 +95,8 @@ python3 -m http.server 8000
 │   ├── writeups.js             # GENERATED list of write-ups and tools
 │   ├── writeup-meta.json       # Optional details per file (titles, tags, ATT&CK IDs)
 │   ├── techniques.js           # My technique notes, each attached to ATT&CK IDs
+│   ├── whoami.js               # whoami page: role, contact links, about text
+│   ├── whoami.txt              # ASCII portrait shown on the whoami page
 │   ├── attack.json             # GENERATED ATT&CK phases and techniques (site)
 │   ├── attack-software.json    # GENERATED ATT&CK software list (bot only)
 │   └── attack-keywords.json    # Words and commands mapped to techniques, for suggestions

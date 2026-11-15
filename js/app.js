@@ -11,6 +11,7 @@
      #/techniques/TA0006    one phase
      #/techniques/T1110.001 one technique, with the write-ups, tools and notes mapped to it
      #/read/<path>          one write-up or tool, rendered from its markdown file
+     #/whoami               about me     (data/whoami.js, portrait in data/whoami.txt)
    ============================================ */
 
 (function () {
@@ -355,6 +356,66 @@
     }, () => { if (token === renderToken) view.innerHTML = `<h1 class="page-title">Techniques</h1>${attackFailHTML}`; });
   }
 
+  /* ---------- whoami ---------- */
+  const placeholder = v => !v || /^\[.*\]$/.test(String(v).trim());
+
+  function renderWhoami(token) {
+    const W = typeof WHOAMI === 'object' ? WHOAMI : { handle: 'angelrmf', about: [] };
+    const val = (v, fill) => placeholder(v)
+      ? `<span class="who-todo">${esc(v || fill)}</span>` : esc(v);
+    const link = (url, text, fill, label) => {
+      if (!url) return `<span class="who-todo">${esc(fill)}</span>`;
+      return `<a href="${esc(url)}" ${url.startsWith('mailto:') ? '' : 'target="_blank" rel="noopener"'} data-p="link: ${esc(label)}">${esc(text)}</a>`;
+    };
+    const email = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(W.email || '') ? W.email : '';
+    const linkedin = isWeb(W.linkedin) ? W.linkedin : '';
+    const github = isWeb(W.github) ? W.github : '';
+    const row = (k, v) => `<div class="who-row"><dt>${esc(k)}</dt><dd>${v}</dd></div>`;
+
+    view.innerHTML = `
+      <h1 class="sr-only">whoami: ${esc(W.handle)}</h1>
+      <p class="who-prompt" aria-hidden="true"><span class="who-ps">$</span> whoami<span class="who-caret"></span></p>
+      <div class="who">
+        <pre class="who-art" id="whoArt" aria-label="ASCII portrait of ${esc(W.handle)}"></pre>
+        <div class="who-card">
+          <p class="who-handle">${esc(W.handle)}<span>@portfolio</span></p>
+          <dl>
+            ${row('Role', val(W.role, '[Your role]'))}
+            ${row('Focus', val(W.focus, '[Your focus]'))}
+            ${row('Location', val(W.location, '[City, country]'))}
+            ${row('Learning', val(W.learning, '[What you are studying]'))}
+          </dl>
+          <p class="who-sub">Contact</p>
+          <dl>
+            ${row('Email', link(email && 'mailto:' + email, email, '[your email]', 'email'))}
+            ${row('LinkedIn', link(linkedin, linkedin.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''), '[your LinkedIn]', 'LinkedIn'))}
+            ${row('GitHub', link(github, github.replace(/^https?:\/\//, ''), '[your GitHub]', 'GitHub'))}
+          </dl>
+          <p class="who-sub">Here</p>
+          <dl>
+            ${Object.keys(SECTIONS).map(id => row(SECTIONS[id].name,
+              `<a href="#/${id}" data-p="section: ${esc(SECTIONS[id].name)}">${plural(inSection(id).length, SECTIONS[id].item[0], SECTIONS[id].item[1])}</a>`)).join('')}
+            ${row('ATT&CK', `<a href="#/techniques" data-p="section: Techniques">${plural(coveredIds().length, 'technique', 'techniques')} covered</a>`)}
+          </dl>
+        </div>
+      </div>
+      <section class="who-about">
+        <h2>About</h2>
+        ${(W.about && W.about.length ? W.about : ['[A few paragraphs about you.]'])
+          .map(p => `<p>${val(p, '[A paragraph about you.]')}</p>`).join('')}
+      </section>`;
+
+    fetch('data/whoami.txt').then(r => { if (!r.ok) throw new Error(r.status); return r.text(); }).then(art => {
+      const el = document.getElementById('whoArt');
+      if (token !== renderToken || !el) return;
+      el.textContent = art.replace(/\s+$/, '');
+      el.classList.add('scan');                              // one scan-line reveal, skipped when effects are off
+    }).catch(() => {
+      const el = document.getElementById('whoArt');
+      if (el) el.textContent = '[ portrait did not load ]';
+    });
+  }
+
   /* ---------- reader ---------- */
   const slug = t => t.toLowerCase().trim().replace(/[^\p{L}\p{N}\s_-]/gu, '').replace(/\s/g, '-');
 
@@ -456,6 +517,7 @@
     if (r.name === 'home') renderHome();
     else if (SECTIONS[r.name]) renderList(r.name);
     else if (r.name === 'techniques') renderTechniques(r.rest.toUpperCase(), token);
+    else if (r.name === 'whoami') renderWhoami(token);
     else if (r.name === 'read') {
       const w = WRITEUPS.find(x => x.path === r.rest);
       current = w ? w.section : '';

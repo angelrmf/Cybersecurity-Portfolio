@@ -1,0 +1,491 @@
+{
+  ".bash_history": [
+    "T1552.003"
+  ],
+  "adduser": [
+    "T1136.001"
+  ],
+  "anonymous ftp": [
+    "T1078.001"
+  ],
+  "anydesk": [
+    "T1219"
+  ],
+  "as-rep": [
+    "T1558.004"
+  ],
+  "asreproast": [
+    "T1558.004"
+  ],
+  "attachment": [
+    "T1566.001"
+  ],
+  "authorized_keys": [
+    "T1098.004"
+  ],
+  "aws s3": [
+    "T1530",
+    "T1619"
+  ],
+  "backdoor account": [
+    "T1136.001"
+  ],
+  "base64 -d": [
+    "T1140"
+  ],
+  "bash -i": [
+    "T1059.004"
+  ],
+  "beacon": [
+    "T1071.001"
+  ],
+  "bloodhound": [
+    "T1087.002",
+    "T1069.002",
+    "T1482"
+  ],
+  "brute force": [
+    "T1110"
+  ],
+  "brute-force": [
+    "T1110"
+  ],
+  "c2": [
+    "T1071"
+  ],
+  "cap_setuid": [
+    "T1548"
+  ],
+  "certutil": [
+    "T1105",
+    "T1140"
+  ],
+  "clear logs": [
+    "T1685.006"
+  ],
+  "clipboard": [
+    "T1115"
+  ],
+  "cmd.exe": [
+    "T1059.003"
+  ],
+  "command injection": [
+    "T1190"
+  ],
+  "connectivity check": [
+    "T1016.001"
+  ],
+  "credential stuffing": [
+    "T1110.004"
+  ],
+  "cron job": [
+    "T1053.003"
+  ],
+  "crontab": [
+    "T1053.003"
+  ],
+  "curl -o": [
+    "T1105"
+  ],
+  "currentversion\\run": [
+    "T1547.001"
+  ],
+  "cve-": [
+    "T1190"
+  ],
+  "dcsync": [
+    "T1003.006"
+  ],
+  "default credentials": [
+    "T1078.001"
+  ],
+  "dirb": [
+    "T1595.003"
+  ],
+  "dirbuster": [
+    "T1595.003"
+  ],
+  "dll side-loading": [
+    "T1574.001"
+  ],
+  "dns tunnel": [
+    "T1071.004"
+  ],
+  "dropbox": [
+    "T1102"
+  ],
+  "encrypt files": [
+    "T1486"
+  ],
+  "evil-winrm": [
+    "T1021.006"
+  ],
+  "exfiltrat": [
+    "T1041"
+  ],
+  "exploit-db": [
+    "T1588.005"
+  ],
+  "failed password": [
+    "T1110.001"
+  ],
+  "feroxbuster": [
+    "T1595.003"
+  ],
+  "ffuf": [
+    "T1595.003"
+  ],
+  "file upload": [
+    "T1190",
+    "T1505.003"
+  ],
+  "frombase64string": [
+    "T1140"
+  ],
+  "getcap": [
+    "T1548"
+  ],
+  "gobuster": [
+    "T1595.003"
+  ],
+  "hashcat": [
+    "T1110.002"
+  ],
+  "history -c": [
+    "T1070.003"
+  ],
+  "hydra": [
+    "T1110.001"
+  ],
+  "id_rsa": [
+    "T1552.004"
+  ],
+  "idor": [
+    "T1190"
+  ],
+  "ifconfig": [
+    "T1016"
+  ],
+  "ipconfig": [
+    "T1016"
+  ],
+  "john": [
+    "T1110.002"
+  ],
+  "kerberoast": [
+    "T1558.003"
+  ],
+  "keylog": [
+    "T1056.001"
+  ],
+  "linpeas": [
+    "T1082",
+    "T1083"
+  ],
+  "living off the land": [
+    "T1218"
+  ],
+  "llmnr": [
+    "T1557.001"
+  ],
+  "lolbin": [
+    "T1218"
+  ],
+  "lsass": [
+    "T1003.001"
+  ],
+  "macro": [
+    "T1204.002",
+    "T1059.005"
+  ],
+  "malicious link": [
+    "T1566.002"
+  ],
+  "masquerad": [
+    "T1036"
+  ],
+  "masscan": [
+    "T1046",
+    "T1595.001"
+  ],
+  "medusa": [
+    "T1110.001"
+  ],
+  "metasploit": [
+    "T1588.002",
+    "T1203"
+  ],
+  "mimikatz": [
+    "T1003.001"
+  ],
+  "msfvenom": [
+    "T1587.001",
+    "T1059"
+  ],
+  "mshta": [
+    "T1218.005"
+  ],
+  "nc -e": [
+    "T1059.004"
+  ],
+  "net user /add": [
+    "T1136.001"
+  ],
+  "netstat": [
+    "T1049"
+  ],
+  "nikto": [
+    "T1595.002"
+  ],
+  "nmap": [
+    "T1046"
+  ],
+  "npm": [
+    "T1195.001"
+  ],
+  "nuclei": [
+    "T1595.002"
+  ],
+  "obfuscat": [
+    "T1027"
+  ],
+  "osint": [
+    "T1593",
+    "T1596"
+  ],
+  "packed": [
+    "T1027.002"
+  ],
+  "pass the hash": [
+    "T1550.002"
+  ],
+  "pass-the-hash": [
+    "T1550.002"
+  ],
+  "password spray": [
+    "T1110.003"
+  ],
+  "pastebin": [
+    "T1102"
+  ],
+  "pcap": [
+    "T1040"
+  ],
+  "phishing": [
+    "T1566"
+  ],
+  "plaintext credentials": [
+    "T1552.001"
+  ],
+  "port scan": [
+    "T1046"
+  ],
+  "powershell": [
+    "T1059.001"
+  ],
+  "private key": [
+    "T1552.004"
+  ],
+  "process injection": [
+    "T1055"
+  ],
+  "ps aux": [
+    "T1057"
+  ],
+  "psexec": [
+    "T1569.002",
+    "T1021.002"
+  ],
+  "pspy": [
+    "T1057"
+  ],
+  "ransomware": [
+    "T1486"
+  ],
+  "rdp": [
+    "T1021.001"
+  ],
+  "regsvr32": [
+    "T1218.010"
+  ],
+  "responder": [
+    "T1557.001"
+  ],
+  "reverse shell": [
+    "T1059.004"
+  ],
+  "rockyou": [
+    "T1110.002"
+  ],
+  "rootkit": [
+    "T1014"
+  ],
+  "run key": [
+    "T1547.001"
+  ],
+  "rundll32": [
+    "T1218.011"
+  ],
+  "rustscan": [
+    "T1046"
+  ],
+  "s3 bucket": [
+    "T1530"
+  ],
+  "scheduled task": [
+    "T1053.005"
+  ],
+  "schtasks": [
+    "T1053.005"
+  ],
+  "screenshot capture": [
+    "T1113"
+  ],
+  "searchsploit": [
+    "T1588.005"
+  ],
+  "secretsdump": [
+    "T1003.006",
+    "T1003.002"
+  ],
+  "service scan": [
+    "T1046"
+  ],
+  "setuid": [
+    "T1548.001"
+  ],
+  "sharphound": [
+    "T1087.002",
+    "T1069.002"
+  ],
+  "shodan": [
+    "T1596.005"
+  ],
+  "smb relay": [
+    "T1557.001"
+  ],
+  "sql injection": [
+    "T1190"
+  ],
+  "sqli": [
+    "T1190"
+  ],
+  "sqlmap": [
+    "T1190"
+  ],
+  "ssh ": [
+    "T1021.004"
+  ],
+  "ssrf": [
+    "T1190"
+  ],
+  "steganograph": [
+    "T1027.003"
+  ],
+  "subdomain": [
+    "T1590.002",
+    "T1595.003"
+  ],
+  "sudo -l": [
+    "T1548.003"
+  ],
+  "sudoers": [
+    "T1548.003"
+  ],
+  "suid": [
+    "T1548.001"
+  ],
+  "supply chain": [
+    "T1195"
+  ],
+  "systemd service": [
+    "T1543.002"
+  ],
+  "systeminfo": [
+    "T1082"
+  ],
+  "tasklist": [
+    "T1057"
+  ],
+  "tcpdump": [
+    "T1040"
+  ],
+  "teamviewer": [
+    "T1219"
+  ],
+  "theharvester": [
+    "T1589.002",
+    "T1593"
+  ],
+  "timestomp": [
+    "T1070.006"
+  ],
+  "timestomping": [
+    "T1070.006"
+  ],
+  "uname -a": [
+    "T1082"
+  ],
+  "upx": [
+    "T1027.002"
+  ],
+  "useradd": [
+    "T1136.001"
+  ],
+  "usermod -ag sudo": [
+    "T1098"
+  ],
+  "valid accounts": [
+    "T1078"
+  ],
+  "vhost": [
+    "T1595.003"
+  ],
+  "vnc": [
+    "T1219"
+  ],
+  "vssadmin": [
+    "T1490"
+  ],
+  "vulnerability scan": [
+    "T1595.002"
+  ],
+  "web shell": [
+    "T1505.003"
+  ],
+  "webshell": [
+    "T1505.003"
+  ],
+  "wfuzz": [
+    "T1595.003"
+  ],
+  "wget http": [
+    "T1105"
+  ],
+  "whoami": [
+    "T1033"
+  ],
+  "whois": [
+    "T1596.002"
+  ],
+  "winpeas": [
+    "T1082",
+    "T1083"
+  ],
+  "winrm": [
+    "T1021.006"
+  ],
+  "wireshark": [
+    "T1040"
+  ],
+  "wmic": [
+    "T1047"
+  ],
+  "xss": [
+    "T1059.007",
+    "T1189"
+  ],
+  "zip2john": [
+    "T1110.002"
+  ]
+}

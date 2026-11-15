@@ -52,7 +52,7 @@ const FX = (function () {
   // First match wins. `label` feeds the cursor readout.
   const KINDS = [
     { kind: 'hero',   sel: '.hero-name',                 label: 'the name. push it around' },
-    { kind: 'row',    sel: '.row, .block, .strip',       label: 'write-up' },
+    { kind: 'row',    sel: '.row, .block, .strip, .trow', label: 'write-up' },
     { kind: 'code',   sel: 'pre, code',                  label: 'code' },
     { kind: 'button', sel: 'button, summary, input',     label: 'control' },
     { kind: 'link',   sel: 'a',                          label: 'link' },

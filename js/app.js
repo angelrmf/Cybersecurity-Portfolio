@@ -2,12 +2,15 @@
    js/app.js — routing and rendering
    ─────────────────────────────────────────
    Pages (hash routes, so GitHub Pages needs no config):
-     #/              home
-     #/ctf           write-up list     (data/writeups.js, section "ctf")
-     #/sherlocks     write-up list     (section "sherlocks")
-     #/malware       write-up list     (section "malware")
-     #/techniques    technique notes   (data/techniques.js)
-     #/read/<path>   one write-up, rendered from its markdown file
+     #/                     home
+     #/ctf                  write-up list     (data/writeups.js, section "ctf")
+     #/sherlocks            write-up list     (section "sherlocks")
+     #/malware              write-up list     (section "malware")
+     #/tools                tool inventory    (section "tools", files in tools/)
+     #/techniques           ATT&CK by phase   (data/attack.json, built from MITRE's data)
+     #/techniques/TA0006    one phase
+     #/techniques/T1110.001 one technique, with the write-ups, tools and notes mapped to it
+     #/read/<path>          one write-up or tool, rendered from its markdown file
    ============================================ */
 
 (function () {
@@ -16,24 +19,59 @@
   const REPO = 'https://github.com/angelrmf/Cybersecurity-Portfolio';
 
   const SECTIONS = {
-    ctf:       { name: 'CTF',              color: 'm', blurb: 'Boxes and wargames, from the first scan to root.' },
-    sherlocks: { name: 'Sherlocks',        color: 'c', blurb: 'Blue-team work: alert triage, threat hunting and reporting.' },
-    malware:   { name: 'Malware analysis', color: 'y', blurb: 'Taking samples apart, statically and in a sandbox.' }
+    ctf:       { name: 'CTF',              color: 'm', item: ['write-up', 'write-ups'], blurb: 'Boxes and wargames, from the first scan to root.' },
+    sherlocks: { name: 'Sherlocks',        color: 'c', item: ['write-up', 'write-ups'], blurb: 'Blue-team work: alert triage, threat hunting and reporting.' },
+    malware:   { name: 'Malware analysis', color: 'y', item: ['write-up', 'write-ups'], blurb: 'Taking samples apart, statically and in a sandbox.' },
+    tools:     { name: 'Tools',            color: 'w', item: ['tool', 'tools'],         blurb: 'What I use, how to install it, and which ATT&CK techniques it serves.' }
   };
 
   const view = document.getElementById('view');
   let heroHandle = null;
+  let renderToken = 0;                                       // lets slow pages notice the visitor moved on
 
   const esc = s => String(s == null ? '' : s)
     .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const inSection = id => WRITEUPS.filter(w => w.section === id);
   const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
-  const readHref = w => '#/read/' + w.path.split('/').map(encodeURIComponent).join('/');
+  const filePath = p => p.split('/').map(encodeURIComponent).join('/');
+  const readHref = w => '#/read/' + filePath(w.path);
+  const isWeb = u => /^https?:\/\/[^\s"'<>]+$/i.test(u || '');
 
   const touch = window.matchMedia('(hover: none), (pointer: coarse)');
   const heroHintText = () => !FX.enabled ? ''
     : touch.matches ? 'Everything here reacts. Tap the name, then tap around.'
     : 'Everything here reacts. Move over the name, then click around.';
+
+  /* ---------- ATT&CK data and coverage ---------- */
+  let attackPromise = null, attackData = null;
+  function loadAttack() {
+    if (!attackPromise) {
+      attackPromise = fetch('data/attack.json')
+        .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(d => (attackData = d))
+        .catch(err => { attackPromise = null; throw err; });
+    }
+    return attackPromise;
+  }
+
+  // Which write-ups, tools and notes point at each technique ID.
+  const WORK = {}, NOTES = {};
+  WRITEUPS.forEach(w => (w.attack || []).forEach(id => (WORK[id] = WORK[id] || []).push(w)));
+  TECHNIQUES.forEach(c => c.entries.forEach(e => (e.attack || []).forEach(id => (NOTES[id] = NOTES[id] || []).push(e))));
+  const withSubs = (map, id) => Object.keys(map).filter(k => k === id || k.startsWith(id + '.'))
+    .reduce((all, k) => all.concat(map[k]), []).filter((v, i, a) => a.indexOf(v) === i);
+  const coveredIds = () => [...new Set(Object.keys(WORK))];
+
+  function tName(id) {
+    const t = attackData && attackData.techniques[id];
+    if (!t) return id;
+    const p = t.parent && attackData.techniques[t.parent];
+    return p ? `${p.name}: ${t.name}` : t.name;
+  }
+  const tState = id => withSubs(WORK, id).length ? 'on' : withSubs(NOTES, id).length ? 'note' : '';
+
+  const attackFailHTML = `<div class="empty"><strong>The ATT&CK data didn't load.</strong>
+    Reload the page to try again. If it keeps failing, data/attack.json may be missing from the site.</div>`;
 
   /* ---------- home ---------- */
   function renderHome() {
@@ -45,11 +83,11 @@
           <span class="block-name" data-scramble>${esc(s.name)}</span>
           <span class="block-blurb">${esc(s.blurb)}</span>
           ${latest ? `<ul class="block-latest">${latest}</ul>` : `<span class="block-latest">Nothing published yet.</span>`}
-          <span class="block-count">${plural(items.length, 'write-up', 'write-ups')}</span>
+          <span class="block-count">${plural(items.length, s.item[0], s.item[1])}</span>
         </a>`;
     }).join('');
 
-    const techCount = TECHNIQUES.reduce((n, c) => n + c.entries.length, 0);
+    const covered = coveredIds().length;
 
     view.innerHTML = `
       <section class="hero">
@@ -60,27 +98,31 @@
       </section>
       <div class="blocks">${blocks}</div>
       <a class="strip" href="#/techniques" data-p="section: Techniques">
-        <span class="strip-name" data-scramble>Technique notes</span>
-        <span>${plural(techCount, 'entry', 'entries')} across ${plural(TECHNIQUES.length, 'category', 'categories')}: commands I keep reaching for</span>
+        <span class="strip-name" data-scramble>Techniques</span>
+        <span>MITRE ATT&amp;CK by phase, with the ${plural(covered, 'technique', 'techniques')} my write-ups and tools cover lit up</span>
       </a>`;
 
-    document.getElementById('heroHint').textContent =
-      heroHintText();
+    document.getElementById('heroHint').textContent = heroHintText();
     heroHandle = FX.hero(document.getElementById('heroName'), 'angelrmf');
   }
 
-  /* ---------- write-up lists ---------- */
+  /* ---------- write-up and tool lists ---------- */
+  const atkChips = (ids, link) => (ids || []).map(id => link
+    ? `<a class="atk" href="#/techniques/${esc(id)}" data-p="technique: ${esc(tName(id))}" title="${esc(tName(id))}">${esc(id)}</a>`
+    : `<span class="atk" title="${esc(tName(id))}">${esc(id)}</span>`).join('');
+
   function rowHTML(w) {
     const wip = w.status && w.status !== 'complete';
+    const tool = w.section === 'tools';
     return `
-      <li><a class="row" href="${readHref(w)}" data-p="write-up: ${esc(w.title)}">
-        <span class="row-platform">${esc(w.platform)}</span>
+      <li><a class="row" href="${readHref(w)}" data-p="${tool ? 'tool' : 'write-up'}: ${esc(w.title)}">
+        <span class="row-platform">${esc(tool ? w.creator : w.platform)}</span>
         <span>
           <span class="row-title" data-scramble>${esc(w.title)}</span>
           <span class="row-summary" style="display:block">${esc(w.summary)}</span>
-          <span class="row-tags">${(w.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</span>
+          <span class="row-tags">${atkChips(w.attack)}${(w.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</span>
         </span>
-        <span class="row-side">${esc(w.level || '')}${wip ? `<span class="status-wip">${esc(w.status)}</span>` : ''}</span>
+        <span class="row-side">${esc(w.level || '')}${tool && w.category ? `<span class="row-cat">${esc(w.category)}</span>` : ''}${wip ? `<span class="status-wip">${esc(w.status)}</span>` : ''}</span>
       </a></li>`;
   }
 
@@ -92,20 +134,21 @@
         <h1 class="page-title">${esc(s.name)}</h1>
         <p class="page-lede">${esc(s.blurb)}</p>
         <div class="empty"><strong>Nothing published here yet.</strong>
-        The first write-up for this section is still being written. The <a href="#/ctf">CTF</a> and <a href="#/sherlocks">Sherlocks</a> sections have finished work in the meantime.</div>`;
+        The first entry for this section is still being written. The <a href="#/ctf">CTF</a> and <a href="#/sherlocks">Sherlocks</a> sections have finished work in the meantime.</div>`;
       return;
     }
 
-    const platforms = [...new Set(all.map(w => w.platform))];
-    let platform = null, query = '';
+    const facet = id === 'tools' ? 'category' : 'platform';
+    const values = [...new Set(all.map(w => w[facet]).filter(Boolean))];
+    let picked = null, query = '';
 
     view.innerHTML = `
       <h1 class="page-title">${esc(s.name)}</h1>
       <p class="page-lede">${esc(s.blurb)}</p>
       <div class="tools">
-        <input class="search" id="q" type="search" placeholder="Search titles, tools and tags" aria-label="Search ${esc(s.name)} write-ups" />
-        ${platforms.length > 1 ? platforms.map(p =>
-          `<button class="chip" type="button" aria-pressed="false" data-platform="${esc(p)}" data-p="filter: ${esc(p)}">${esc(p)}</button>`).join('') : ''}
+        <input class="search" id="q" type="search" placeholder="Search titles, tools, tags and ATT&CK IDs" aria-label="Search ${esc(s.name)}" />
+        ${values.length > 1 ? values.map(p =>
+          `<button class="chip" type="button" aria-pressed="false" data-value="${esc(p)}" data-p="filter: ${esc(p)}">${esc(p)}</button>`).join('') : ''}
       </div>
       <ul class="rows ${s.color}" id="rows"></ul>`;
 
@@ -114,29 +157,31 @@
     function paint() {
       const q = query.trim().toLowerCase();
       const hits = all.filter(w =>
-        (!platform || w.platform === platform) &&
-        (!q || [w.title, w.platform, w.level, w.summary, ...(w.tags || [])].join(' ').toLowerCase().includes(q)));
+        (!picked || w[facet] === picked) &&
+        (!q || [w.title, w.platform, w.creator, w.category, w.level, w.summary, ...(w.tags || []),
+                ...(w.attack || []), ...(w.attack || []).map(tName)].join(' ').toLowerCase().includes(q)));
       rows.innerHTML = hits.length
         ? hits.map(rowHTML).join('')
-        : `<li class="empty" style="border:0">No write-ups match that. Clear the search or pick another platform.</li>`;
+        : `<li class="empty" style="border:0">Nothing matches that. Clear the search or pick another filter.</li>`;
     }
 
     document.getElementById('q').addEventListener('input', e => { query = e.target.value; paint(); });
     view.querySelectorAll('.chip').forEach(chip => chip.addEventListener('click', () => {
-      platform = platform === chip.dataset.platform ? null : chip.dataset.platform;
-      view.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.platform === platform)));
+      picked = picked === chip.dataset.value ? null : chip.dataset.value;
+      view.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.value === picked)));
       paint();
     }));
     paint();
+    loadAttack().then(paint).catch(() => {});                 // adds technique names to the tooltips and search
   }
 
-  /* ---------- technique notes ---------- */
-  function techHTML(e) {
+  /* ---------- technique notes (data/techniques.js) ---------- */
+  function noteHTML(e) {
     const sev = e.severity && e.severity !== 'info'
       ? `<span class="sev sev-${esc(e.severity)}">${esc(e.severity)}</span>` : '';
     return `
       <details class="tech">
-        <summary data-p="technique: ${esc(e.name)}">
+        <summary data-p="note: ${esc(e.name)}">
           <span class="tech-name" data-scramble>${esc(e.name)}</span>
           <span class="tech-alias">${esc(e.alias)}</span>
           ${sev}
@@ -145,32 +190,169 @@
           <p>${esc(e.summary)}</p>
           ${e.notes ? `<pre><code>${esc(e.notes)}</code></pre>` : ''}
           <div class="row-tags">${(e.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
-          ${e.link ? `<p style="margin-top:.8rem"><a href="${esc(e.link)}" target="_blank" rel="noopener">Open the reference</a></p>` : ''}
+          ${isWeb(e.link) ? `<p style="margin-top:.8rem"><a href="${esc(e.link)}" target="_blank" rel="noopener">Open the reference</a></p>` : ''}
         </div>
       </details>`;
   }
 
-  function renderTechniques() {
-    view.innerHTML = `
-      <h1 class="page-title">Technique notes</h1>
-      <p class="page-lede">Short notes and the commands that go with them. Open an entry to read it.</p>
-      <div class="tools">
-        <input class="search" id="q" type="search" placeholder="Search techniques, tools and tags" aria-label="Search technique notes" />
-      </div>
-      <div id="cats"></div>`;
+  /* ---------- techniques: shared pieces ---------- */
+  function phaseBar(current) {
+    return `<nav class="phase-bar" aria-label="ATT&CK phases">
+      <a class="chip" href="#/techniques" ${!current ? 'aria-current="page"' : ''} data-p="all phases">All phases</a>
+      ${attackData.tactics.map(t => `<a class="chip" href="#/techniques/${t.id}" ${current === t.id ? 'aria-current="page"' : ''} data-p="phase: ${esc(t.name)}">${esc(t.name)}</a>`).join('')}
+    </nav>`;
+  }
 
-    const cats = document.getElementById('cats');
-    function paint(q) {
-      q = q.trim().toLowerCase();
-      const html = TECHNIQUES.map(cat => {
-        const hits = cat.entries.filter(e => !q ||
-          [e.name, e.alias, e.summary, e.severity, e.group, ...(e.tags || [])].join(' ').toLowerCase().includes(q));
-        return hits.length ? `<section class="tech-cat"><h2>${esc(cat.name)}</h2>${hits.map(techHTML).join('')}</section>` : '';
+  const parentsIn = short => Object.keys(attackData.techniques)
+    .filter(id => !attackData.techniques[id].parent && attackData.techniques[id].tactics.includes(short))
+    .sort((a, b) => attackData.techniques[a].name.localeCompare(attackData.techniques[b].name));
+  const subsOf = id => Object.keys(attackData.techniques).filter(k => attackData.techniques[k].parent === id);
+
+  function tRow(id, sub) {
+    const st = tState(id), n = withSubs(WORK, id).length;
+    return `<a class="trow ${st} ${sub ? 'sub' : ''}" href="#/techniques/${esc(id)}" data-p="technique: ${esc(tName(id))}">
+      <span class="t-id">${esc(id)}</span>
+      <span class="t-name" ${sub ? '' : 'data-scramble'}>${esc(sub ? attackData.techniques[id].name : tName(id))}</span>
+      <span class="t-count">${n ? plural(n, 'entry', 'entries') : st === 'note' ? 'notes' : ''}</span>
+    </a>`;
+  }
+
+  /* ---------- techniques: overview ---------- */
+  function renderMatrix() {
+    const covered = coveredIds().filter(id => attackData.techniques[id]);
+    let i = 0;
+    const cols = attackData.tactics.map(t => {
+      const ids = parentsIn(t.short);
+      const lit = ids.filter(id => tState(id) === 'on').length;
+      const cells = ids.map(id => {
+        const st = tState(id);
+        return `<a class="mx-cell ${st}" href="#/techniques/${esc(id)}" style="--i:${st ? i++ : 0}"
+          data-p="${esc(id)} ${esc(tName(id))}" aria-label="${esc(id)} ${esc(tName(id))}${st === 'on' ? ', covered' : st === 'note' ? ', notes' : ''}"></a>`;
       }).join('');
-      cats.innerHTML = html || `<div class="empty">No technique notes match that. Try a tool name such as nmap.</div>`;
+      return `<div class="mx-col">
+        <h2><a href="#/techniques/${t.id}" data-p="phase: ${esc(t.name)}">${esc(t.name)}</a></h2>
+        <span class="mx-count">${lit} of ${ids.length}</span>
+        <div class="mx-cells">${cells}</div>
+      </div>`;
+    }).join('');
+
+    const top = covered.slice().sort((a, b) => withSubs(WORK, b).length - withSubs(WORK, a).length || a.localeCompare(b));
+
+    view.innerHTML = `
+      <h1 class="page-title">Techniques</h1>
+      <p class="page-lede">MITRE ATT&amp;CK Enterprise ${esc(attackData.version)}, by phase. Each square is a technique; the lit ones are covered by my write-ups and tools. Hover a square to name it, click it to see where I used it.</p>
+      ${phaseBar('')}
+      <div class="legend" aria-hidden="true">
+        <span><i class="mx-cell on"></i>In a write-up or tool</span>
+        <span><i class="mx-cell note"></i>Notes only</span>
+        <span><i class="mx-cell"></i>Not covered yet</span>
+      </div>
+      <div class="matrix">${cols}</div>
+      <div class="tools">
+        <input class="search" id="tq" type="search" placeholder="Find any technique by ID or name, for example T1046 or brute force" aria-label="Find an ATT&CK technique" />
+      </div>
+      <div class="tlist" id="tfind"></div>
+      <section class="tech-cat">
+        <h2>Covered in my work</h2>
+        <div class="tlist">${top.map(id => tRow(id)).join('') || '<p class="empty">Nothing mapped yet.</p>'}</div>
+      </section>
+      <p class="t-source">Technique data from <a href="${esc(attackData.source)}" target="_blank" rel="noopener">MITRE ATT&amp;CK</a>, version ${esc(attackData.version)} (${esc(attackData.modified)}). ATT&amp;CK is a registered trademark of The MITRE Corporation.</p>`;
+
+    const out = document.getElementById('tfind');
+    document.getElementById('tq').addEventListener('input', e => {
+      const q = e.target.value.trim().toLowerCase();
+      if (q.length < 2) { out.innerHTML = ''; return; }
+      const hits = Object.keys(attackData.techniques)
+        .filter(id => id.toLowerCase().startsWith(q) || tName(id).toLowerCase().includes(q)).slice(0, 25);
+      out.innerHTML = hits.length ? hits.map(id => tRow(id)).join('')
+        : `<p class="empty">No technique matches that. Try a shorter word, or an ID such as T1059.</p>`;
+    });
+  }
+
+  /* ---------- techniques: one phase ---------- */
+  function renderPhase(id) {
+    const t = attackData.tactics.find(x => x.id === id);
+    const ids = parentsIn(t.short);
+    let only = false;
+
+    view.innerHTML = `
+      <a class="back" href="#/techniques" data-p="back to all phases">All phases</a>
+      <h1 class="page-title">${esc(t.name)}</h1>
+      <p class="page-lede">${esc(t.desc)}</p>
+      ${phaseBar(id)}
+      <div class="tools">
+        <button class="chip" id="only" type="button" aria-pressed="false" data-p="filter: covered only">Only what I've covered</button>
+      </div>
+      <div class="tlist" id="plist"></div>`;
+
+    const list = document.getElementById('plist');
+    function paint() {
+      const html = ids.map(pid => {
+        const subs = subsOf(pid);
+        if (only && !tState(pid)) return '';
+        return tRow(pid) + subs.filter(s => !only || tState(s)).map(s => tRow(s, true)).join('');
+      }).join('');
+      list.innerHTML = html || `<p class="empty">Nothing in this phase is covered yet. Turn the filter off to see every technique in it.</p>`;
     }
-    document.getElementById('q').addEventListener('input', e => paint(e.target.value));
-    paint('');
+    document.getElementById('only').addEventListener('click', e => {
+      only = !only; e.currentTarget.setAttribute('aria-pressed', String(only)); paint();
+    });
+    paint();
+  }
+
+  /* ---------- techniques: one technique ---------- */
+  function renderTechnique(id) {
+    const t = attackData.techniques[id];
+    const phases = attackData.tactics.filter(x => t.tactics.includes(x.short));
+    const parent = t.parent && attackData.techniques[t.parent];
+    const subs = subsOf(id);
+    const work = withSubs(WORK, id), notes = withSubs(NOTES, id);
+    const url = `https://attack.mitre.org/techniques/${id.replace('.', '/')}/`;
+
+    view.innerHTML = `
+      <a class="back" href="#/techniques/${phases[0] ? phases[0].id : ''}" data-p="back to ${esc(phases[0] ? phases[0].name : 'phases')}">${esc(phases[0] ? phases[0].name : 'All phases')}</a>
+      <header class="read-head">
+        <h1 class="page-title">${esc(t.name)}</h1>
+        <div class="read-meta">
+          <span class="t-id">${esc(id)}</span>
+          ${parent ? `<a href="#/techniques/${esc(t.parent)}" data-p="technique: ${esc(parent.name)}">Part of ${esc(parent.name)}</a>` : ''}
+          ${phases.map(p => `<a href="#/techniques/${p.id}" data-p="phase: ${esc(p.name)}">${esc(p.name)}</a>`).join('')}
+        </div>
+        <div class="t-actions">
+          <button class="ctl" id="copyId" type="button" data-p="copy ${esc(id)} for a form">Copy ${esc(id)}</button>
+          <a class="ctl" href="${url}" target="_blank" rel="noopener" data-p="link: attack.mitre.org">Open on attack.mitre.org</a>
+        </div>
+      </header>
+      <p class="t-desc">${esc(t.desc)}</p>
+      ${t.platforms && t.platforms.length ? `<p class="t-plat">Platforms: ${esc(t.platforms.join(', '))}</p>` : ''}
+      <section class="tech-cat">
+        <h2>Used in my work</h2>
+        ${work.length ? `<ul class="rows">${work.map(rowHTML).join('')}</ul>`
+          : `<p class="empty">No write-up or tool is mapped to this technique yet. To map one, add ${esc(id)} to the ATT&amp;CK field of its form.</p>`}
+      </section>
+      ${notes.length ? `<section class="tech-cat"><h2>My notes</h2>${notes.map(noteHTML).join('')}</section>` : ''}
+      ${subs.length ? `<section class="tech-cat"><h2>Sub-techniques</h2><div class="tlist">${subs.map(s => tRow(s, true)).join('')}</div></section>` : ''}
+      <p class="t-source">Description from <a href="${url}" target="_blank" rel="noopener">MITRE ATT&amp;CK</a> ${esc(attackData.version)}.</p>`;
+
+    const btn = document.getElementById('copyId');
+    btn.addEventListener('click', () => {
+      const done = ok => { btn.textContent = ok ? 'Copied' : `Copy failed, select ${id}`; setTimeout(() => { btn.textContent = `Copy ${id}`; }, 1600); };
+      if (navigator.clipboard) navigator.clipboard.writeText(id).then(() => done(true), () => done(false));
+      else done(false);
+    });
+  }
+
+  function renderTechniques(rest, token) {
+    view.innerHTML = `<h1 class="page-title">Techniques</h1><p class="page-lede">Loading the ATT&amp;CK data…</p>`;
+    loadAttack().then(() => {
+      if (token !== renderToken) return;                     // visitor already moved on
+      if (!rest) renderMatrix();
+      else if (attackData.tactics.some(t => t.id === rest)) renderPhase(rest);
+      else if (attackData.techniques[rest]) renderTechnique(rest);
+      else if (attackData.revoked[rest]) location.replace(`#/techniques/${attackData.revoked[rest]}`);
+      else view.innerHTML = `<h1 class="page-title">Technique not found</h1>
+        <div class="empty">${esc(rest)} is not in ATT&amp;CK ${esc(attackData.version)}. <a href="#/techniques">Browse all phases</a>.</div>`;
+    }, () => { if (token === renderToken) view.innerHTML = `<h1 class="page-title">Techniques</h1>${attackFailHTML}`; });
   }
 
   /* ---------- reader ---------- */
@@ -180,35 +362,45 @@
     const w = WRITEUPS.find(x => x.path === path);          // only files listed in the manifest are ever fetched
     if (!w) {
       view.innerHTML = `
-        <h1 class="page-title">Write-up not found</h1>
-        <div class="empty">There is no write-up at this address. It may have been renamed. <a href="#/">Go to the home page</a> to browse everything.</div>`;
+        <h1 class="page-title">Page not found</h1>
+        <div class="empty">There is nothing at this address. It may have been renamed. <a href="#/">Go to the home page</a> to browse everything.</div>`;
       return;
     }
     const s = SECTIONS[w.section];
     const wip = w.status && w.status !== 'complete';
+    const tool = w.section === 'tools';
+    const meta = tool
+      ? [w.creator, w.category, w.level, (w.platforms || []).join(', '), w.license && `License: ${w.license}`]
+      : [w.platform, w.level];
 
     view.innerHTML = `
       <a class="back" href="#/${w.section}" data-p="back to ${esc(s.name)}">Back to ${esc(s.name)}</a>
       <header class="read-head">
         <h1 class="page-title">${esc(w.title)}</h1>
         <div class="read-meta">
-          <span>${esc(w.platform)}</span>
-          ${w.level ? `<span>${esc(w.level)}</span>` : ''}
+          ${meta.filter(Boolean).map(m => `<span>${esc(m)}</span>`).join('')}
           ${wip ? `<span class="m">${esc(w.status)}</span>` : ''}
-          <a href="${REPO}/blob/main/${w.path.split('/').map(encodeURIComponent).join('/')}" target="_blank" rel="noopener" data-p="link: this file on GitHub">View on GitHub</a>
+          ${tool && isWeb(w.repo) ? `<a href="${esc(w.repo)}" target="_blank" rel="noopener" data-p="link: ${esc(w.title)} homepage">Homepage</a>` : ''}
+          ${w.software && /^S\d{4}$/.test(w.software) ? `<a href="https://attack.mitre.org/software/${w.software}/" target="_blank" rel="noopener" data-p="link: ATT&CK software ${w.software}">ATT&amp;CK ${w.software}</a>` : ''}
+          <a href="${REPO}/blob/main/${filePath(w.path)}" target="_blank" rel="noopener" data-p="link: this file on GitHub">View on GitHub</a>
         </div>
+        ${w.attack && w.attack.length ? `<div class="row-tags read-atk" id="readAtk">${atkChips(w.attack, true)}</div>` : ''}
       </header>
-      <article class="prose" id="prose"><p>Loading the write-up…</p></article>`;
+      <article class="prose" id="prose"><p>Loading…</p></article>`;
+
+    if (w.attack && w.attack.length) {
+      loadAttack().then(() => { const el = document.getElementById('readAtk'); if (el) el.innerHTML = atkChips(w.attack, true); }).catch(() => {});
+    }
 
     const prose = document.getElementById('prose');
     try {
-      const res = await fetch(w.path.split('/').map(encodeURIComponent).join('/'));
+      const res = await fetch(filePath(w.path));
       if (!res.ok) throw new Error(res.status);
       const md = await res.text();
       if (!prose.isConnected) return;                        // visitor already moved on
-      prose.innerHTML = marked.parse(md.replace(/^\uFEFF?---\s*\n[\s\S]*?\n---\s*(?:\n|$)/, ''));   // hide optional front matter
+      prose.innerHTML = marked.parse(md.replace(/^﻿?---\s*\n[\s\S]*?\n---\s*(?:\n|$)/, ''));   // hide front matter
     } catch (err) {
-      prose.innerHTML = `<div class="empty"><strong>This write-up didn't load.</strong>
+      prose.innerHTML = `<div class="empty"><strong>This page didn't load.</strong>
         Read it <a href="${REPO}/blob/main/${esc(w.path)}" target="_blank" rel="noopener">on GitHub</a> instead, or reload the page to try again.</div>`;
       return;
     }
@@ -257,12 +449,13 @@
   function render() {
     const r = route();
     if (!r) return;
+    const token = ++renderToken;
     if (heroHandle) { heroHandle.destroy(); heroHandle = null; }
 
     let current = r.name;
     if (r.name === 'home') renderHome();
     else if (SECTIONS[r.name]) renderList(r.name);
-    else if (r.name === 'techniques') renderTechniques();
+    else if (r.name === 'techniques') renderTechniques(r.rest.toUpperCase(), token);
     else if (r.name === 'read') {
       const w = WRITEUPS.find(x => x.path === r.rest);
       current = w ? w.section : '';

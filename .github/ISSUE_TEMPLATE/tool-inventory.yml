@@ -1,0 +1,165 @@
+name: Tool for the inventory
+description: Add or update a tool. Submitting opens a pull request with the file in tools/.
+title: "Tool: "
+body:
+  - type: dropdown
+    id: section
+    attributes:
+      label: Section
+      description: Decides which folder the entry goes into. Leave as it is.
+      options:
+        - Tool
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: case
+    attributes:
+      label: Tool name
+      description: Shown as the title on the site. A folder is named after it. If ATT&CK lists the tool as software (Mimikatz, BloodHound, Impacket...), use the same name and the bot suggests its techniques.
+      placeholder: "BloodHound"
+    validations:
+      required: true
+  - type: input
+    id: creator
+    attributes:
+      label: Creator or maintainer
+      description: The person, team or company behind the tool.
+      placeholder: "SpecterOps"
+    validations:
+      required: true
+  - type: input
+    id: repo
+    attributes:
+      label: Homepage or repository
+      description: A full link starting with https://
+      placeholder: "https://github.com/SpecterOps/BloodHound"
+    validations:
+      required: true
+  - type: input
+    id: license
+    attributes:
+      label: License
+      placeholder: "Apache-2.0, GPL-3.0, commercial"
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Reconnaissance and scanning
+        - Web application testing
+        - Exploitation framework
+        - Password attacks
+        - Post-exploitation
+        - Active Directory
+        - Command and control
+        - Network analysis
+        - Forensics and DFIR
+        - Log analysis and SIEM
+        - Malware analysis and reversing
+        - OSINT
+        - Utility
+    validations:
+      required: true
+  - type: checkboxes
+    id: platforms
+    attributes:
+      label: Platforms
+      description: Where the tool runs.
+      options:
+        - label: Linux
+        - label: Windows
+        - label: macOS
+        - label: Docker or container
+        - label: Web-based
+  - type: dropdown
+    id: use
+    attributes:
+      label: Use
+      description: Shown next to the tool in the list.
+      options:
+        - Red team
+        - Blue team
+        - Red and blue team
+    validations:
+      required: true
+  - type: dropdown
+    id: status
+    attributes:
+      label: Status
+      options:
+        - complete
+        - in progress
+      default: 0
+    validations:
+      required: true
+  - type: input
+    id: attack
+    attributes:
+      label: ATT&CK techniques
+      description: "Technique IDs the tool is used for, separated by commas. Not sure? Leave it empty: after you submit, the bot comments suggestions, including the techniques ATT&CK itself links to the tool. Browse them by phase at https://angelrmf.github.io/Cybersecurity-Portfolio/#/techniques"
+      placeholder: "T1087.002, T1069.002, T1482"
+  - type: input
+    id: tags
+    attributes:
+      label: Tags
+      description: Separate them with commas.
+      placeholder: "Active Directory, graph, enumeration"
+  - type: input
+    id: summary
+    attributes:
+      label: Summary
+      description: One sentence. It is shown under the name in the list on the site.
+      placeholder: "Maps Active Directory relationships as a graph to find attack paths to Domain Admin."
+    validations:
+      required: true
+  - type: input
+    id: replace
+    attributes:
+      label: Existing file to replace
+      description: Leave empty for a new tool. To edit one that is already published, paste its path exactly as it is in the repo, then paste the full updated text below.
+      placeholder: "tools/bloodhound/README.md"
+  - type: textarea
+    id: writeup
+    attributes:
+      label: Write-up
+      description: Markdown. Drag screenshots straight into this box to attach them.
+      value: |
+        ## What it does
+
+        What the tool is for and the problem it solves, in two or three sentences.
+
+        ## Installation
+
+        ```bash
+        # official install command, for example:
+        sudo apt install <tool>
+        ```
+
+        Requirements, versions, and anything that tripped you up.
+
+        ## Usage
+
+        ```bash
+        <tool> --help
+        ```
+
+        The commands you actually use, with a line on what each one does.
+
+        ## Technical details
+
+        How it works under the hood: protocols, files it touches, what it sends over the network.
+
+        ## How it maps to ATT&CK
+
+        Which techniques it helps with, and in which phase you use it.
+
+        ## Detection
+
+        What a defender sees when it runs: logs, event IDs, network signatures.
+
+        ## References
+
+        - 
+    validations:
+      required: true

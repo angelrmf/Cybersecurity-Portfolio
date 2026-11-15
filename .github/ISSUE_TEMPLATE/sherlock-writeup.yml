@@ -61,6 +61,12 @@ body:
     validations:
       required: true
   - type: input
+    id: attack
+    attributes:
+      label: ATT&CK techniques
+      description: "Technique IDs, separated by commas, for example T1110.001. Not sure? Leave it empty: after you submit, the bot reads your write-up and comments suggestions. Browse them by phase at https://angelrmf.github.io/Cybersecurity-Portfolio/#/techniques"
+      placeholder: "T1110.001, T1136.001, T1098"
+  - type: input
     id: tags
     attributes:
       label: Tags

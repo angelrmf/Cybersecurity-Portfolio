@@ -1,9 +1,11 @@
 /* ============================================
    data/techniques.js
    ─────────────────────────────────────────
-   ADD YOUR TECHNIQUES HERE.
-   Each category has a name, an id, optional
-   role groups, and an array of entries.
+   YOUR OWN TECHNIQUE NOTES.
+   Each note is shown on the Techniques page, on the
+   page of every ATT&CK technique listed in its
+   "attack" field. Tools now live in tools/ (one
+   markdown file per tool), not here.
 
    Entry fields:
      id        — unique string
@@ -14,6 +16,8 @@
      image     — path to image (optional, leave "" for placeholder)
      summary   — short description shown in modal
      notes     — code snippet, command, or key note (optional)
+     attack    — ATT&CK technique IDs the note belongs to, e.g. ["T1548.003"]
+                 (look one up: python3 scripts/attack_map.py --find "sudo")
      link      — URL to full write-up / docs (optional)
      group     — sub-group within a category (optional)
    ============================================ */
@@ -25,6 +29,7 @@ const TECHNIQUES = [
     entries: [
       {
         id: "recon-passive-osint",
+        attack: ["T1593", "T1596", "T1589"],
         name: "PASSIVE OSINT",
         alias: "Open Source Intelligence",
         tags: ["OSINT", "Passive"],
@@ -37,6 +42,7 @@ const TECHNIQUES = [
       },
       {
         id: "recon-active-scan",
+        attack: ["T1595.001", "T1046"],
         name: "PORT SCANNING",
         alias: "nmap / masscan",
         tags: ["Active", "Network"],
@@ -49,6 +55,7 @@ const TECHNIQUES = [
       },
       {
         id: "recon-subdomain",
+        attack: ["T1590.002", "T1595.003"],
         name: "SUBDOMAIN ENUM",
         alias: "amass / subfinder",
         tags: ["DNS", "Passive", "Active"],
@@ -68,6 +75,7 @@ const TECHNIQUES = [
     entries: [
       {
         id: "web-sqli",
+        attack: ["T1190"],
         name: "SQL INJECTION",
         alias: "SQLi / CVE class",
         tags: ["Injection", "Database"],
@@ -80,6 +88,7 @@ const TECHNIQUES = [
       },
       {
         id: "web-xss",
+        attack: ["T1059.007", "T1189"],
         name: "CROSS-SITE SCRIPTING",
         alias: "XSS (Reflected/Stored/DOM)",
         tags: ["XSS", "Client-Side"],
@@ -92,6 +101,7 @@ const TECHNIQUES = [
       },
       {
         id: "web-ssrf",
+        attack: ["T1190", "T1552.005"],
         name: "SSRF",
         alias: "Server-Side Request Forgery",
         tags: ["SSRF", "Cloud"],
@@ -104,6 +114,7 @@ const TECHNIQUES = [
       },
       {
         id: "web-idor",
+        attack: ["T1190"],
         name: "IDOR",
         alias: "Insecure Direct Object Reference",
         tags: ["Access Control", "OWASP"],
@@ -123,6 +134,7 @@ const TECHNIQUES = [
     entries: [
       {
         id: "net-mitm",
+        attack: ["T1557"],
         name: "MAN-IN-THE-MIDDLE",
         alias: "ARP Spoofing / SSL Strip",
         tags: ["Network", "MITM"],
@@ -135,6 +147,7 @@ const TECHNIQUES = [
       },
       {
         id: "net-smb",
+        attack: ["T1557.001"],
         name: "SMB RELAY",
         alias: "NTLM Relay / Responder",
         tags: ["Windows", "Lateral Movement"],
@@ -154,6 +167,7 @@ const TECHNIQUES = [
     entries: [
       {
         id: "privesc-linux-suid",
+        attack: ["T1548.001"],
         name: "SUID EXPLOITATION",
         alias: "Linux PrivEsc",
         tags: ["Linux", "Local"],
@@ -166,6 +180,7 @@ const TECHNIQUES = [
       },
       {
         id: "privesc-win-token",
+        attack: ["T1134.001"],
         name: "TOKEN IMPERSONATION",
         alias: "Potato / SeImpersonate",
         tags: ["Windows", "Token"],
@@ -178,6 +193,7 @@ const TECHNIQUES = [
       },
       {
         id: "privesc-sudo",
+        attack: ["T1548.003"],
         name: "SUDO ABUSE",
         alias: "sudoers misconfiguration",
         tags: ["Linux", "Sudo"],
@@ -197,6 +213,7 @@ const TECHNIQUES = [
     entries: [
       {
         id: "ad-kerberoast",
+        attack: ["T1558.003"],
         name: "KERBEROASTING",
         alias: "SPN Enumeration",
         tags: ["Kerberos", "Credential Access"],
@@ -209,6 +226,7 @@ const TECHNIQUES = [
       },
       {
         id: "ad-asreproast",
+        attack: ["T1558.004"],
         name: "AS-REP ROASTING",
         alias: "Kerberos Pre-Auth Disabled",
         tags: ["Kerberos", "Credential Access"],
@@ -221,6 +239,7 @@ const TECHNIQUES = [
       },
       {
         id: "ad-dcsync",
+        attack: ["T1003.006"],
         name: "DCSYNC",
         alias: "secretsdump / replication abuse",
         tags: ["AD", "Domain Compromise"],
@@ -230,37 +249,6 @@ const TECHNIQUES = [
         notes: "secretsdump.py -just-dc domain/user:pass@<DC>\nmimikatz lsadump::dcsync /user:krbtgt",
         link: "",
         group: "Domain Compromise"
-      }
-    ]
-  },
-
-  {
-    id: "tools",
-    name: "TOOLS & SCRIPTS",
-    entries: [
-      {
-        id: "tool-burp",
-        name: "BURP SUITE",
-        alias: "Web Proxy / Scanner",
-        tags: ["Tool", "Web"],
-        severity: "info",
-        image: "",
-        summary: "Intercept, replay, and fuzz HTTP/S traffic. Core tool for web application testing. Extensions (BApp Store): Autorize, JWT Editor, Turbo Intruder.",
-        notes: "# Set proxy: 127.0.0.1:8080\n# Import CA cert for HTTPS intercept",
-        link: "https://portswigger.net/burp",
-        group: "Web"
-      },
-      {
-        id: "tool-metasploit",
-        name: "METASPLOIT",
-        alias: "MSF Framework",
-        tags: ["Tool", "Exploitation"],
-        severity: "info",
-        image: "",
-        summary: "Full exploitation framework covering initial exploitation, post-exploitation, and pivoting. Use msfvenom for payload generation.",
-        notes: "msfconsole\nuse exploit/...\nset RHOSTS <target>\nrun",
-        link: "https://metasploit.com",
-        group: "Framework"
       }
     ]
   }

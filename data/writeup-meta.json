@@ -10,7 +10,15 @@
       "pcap",
       "Linux capabilities"
     ],
-    "summary": "An IDOR exposes another user's packet capture with plaintext credentials, then a Linux capability gives root."
+    "summary": "An IDOR exposes another user's packet capture with plaintext credentials, then a Linux capability gives root.",
+    "attack": [
+      "T1046",
+      "T1190",
+      "T1040",
+      "T1078",
+      "T1021.004",
+      "T1548"
+    ]
   },
   "CTF/HTB/Easy/vaccine.md": {
     "section": "ctf",
@@ -24,7 +32,16 @@
       "SQL injection",
       "sqlmap"
     ],
-    "summary": "Anonymous FTP leaks a zip backup. Cracked credentials lead to SQL injection and a shell."
+    "summary": "Anonymous FTP leaks a zip backup. Cracked credentials lead to SQL injection and a shell.",
+    "attack": [
+      "T1046",
+      "T1078.001",
+      "T1110.002",
+      "T1190",
+      "T1059.004",
+      "T1552.001",
+      "T1548.003"
+    ]
   },
   "CTF/HTB/Easy/three.md": {
     "section": "ctf",
@@ -37,7 +54,14 @@
       "S3",
       "webshell"
     ],
-    "summary": "Vhost enumeration finds an S3-compatible bucket behind the site. A PHP webshell uploaded to it gives code execution."
+    "summary": "Vhost enumeration finds an S3-compatible bucket behind the site. A PHP webshell uploaded to it gives code execution.",
+    "attack": [
+      "T1046",
+      "T1595.003",
+      "T1530",
+      "T1505.003",
+      "T1059.004"
+    ]
   },
   "CTF/HTB/Easy/reactor.md": {
     "section": "ctf",
@@ -49,7 +73,11 @@
       "Next.js",
       "recon"
     ],
-    "summary": "Recon on a Next.js app and what its JavaScript chunks can leak. Exploitation still to come."
+    "summary": "Recon on a Next.js app and what its JavaScript chunks can leak. Exploitation still to come.",
+    "attack": [
+      "T1046",
+      "T1592.002"
+    ]
   },
   "CTF/HTB/Easy/orion.md": {
     "section": "ctf",
@@ -61,7 +89,11 @@
       "nmap",
       "vhost"
     ],
-    "summary": "Port scan and vhost resolution for orion.htb. Enumeration in progress."
+    "summary": "Port scan and vhost resolution for orion.htb. Enumeration in progress.",
+    "attack": [
+      "T1046",
+      "T1595.003"
+    ]
   },
   "CTF/Rootme/Network/FTP.md": {
     "section": "ctf",
@@ -74,7 +106,10 @@
       "FTP",
       "Wireshark"
     ],
-    "summary": "Pulling FTP credentials out of a packet capture."
+    "summary": "Pulling FTP credentials out of a packet capture.",
+    "attack": [
+      "T1040"
+    ]
   },
   "CTF/Breachlabs/track1.md": {
     "section": "ctf",
@@ -88,7 +123,12 @@
       "netcat",
       "permissions"
     ],
-    "summary": "A Linux and networking wargame: dotfiles, awkward filenames, permissions, pattern matching and raw port interaction."
+    "summary": "A Linux and networking wargame: dotfiles, awkward filenames, permissions, pattern matching and raw port interaction.",
+    "attack": [
+      "T1083",
+      "T1046",
+      "T1552.003"
+    ]
   },
   "CTF/Overthewire/Banditlabs.md": {
     "section": "ctf",
@@ -101,7 +141,11 @@
       "SSH",
       "command line"
     ],
-    "summary": "Notes and solutions for the Bandit wargame, with an explanation of each command."
+    "summary": "Notes and solutions for the Bandit wargame, with an explanation of each command.",
+    "attack": [
+      "T1083",
+      "T1021.004"
+    ]
   },
   "sherlocks/THM/threat_hunting_sim.md": {
     "section": "sherlocks",
@@ -115,7 +159,16 @@
       "PowerShell",
       "MITRE ATT&CK"
     ],
-    "summary": "An IOC-driven hunt in Splunk: pivoting from a domain to a package, rebuilding the process tree and deobfuscating the payload."
+    "summary": "An IOC-driven hunt in Splunk: pivoting from a domain to a package, rebuilding the process tree and deobfuscating the payload.",
+    "attack": [
+      "T1195.001",
+      "T1059.001",
+      "T1027.010",
+      "T1140",
+      "T1564.003",
+      "T1105",
+      "T1547.001"
+    ]
   },
   "sherlocks/THM/soc_simulator.md": {
     "section": "sherlocks",
@@ -128,7 +181,10 @@
       "alert triage",
       "incident report"
     ],
-    "summary": "Working alerts as a SOC analyst: true or false positive, correlation across sources, escalation and case reports."
+    "summary": "Working alerts as a SOC analyst: true or false positive, correlation across sources, escalation and case reports.",
+    "attack": [
+      "T1566"
+    ]
   },
   "sherlocks/htb/brutus.md": {
     "section": "sherlocks",
@@ -142,7 +198,16 @@
       "SSH brute force",
       "persistence"
     ],
-    "summary": "Linux log forensics: an SSH brute force that lands root, a backdoor account added afterwards and a persistence script pulled from GitHub."
+    "summary": "Linux log forensics: an SSH brute force that lands root, a backdoor account added afterwards and a persistence script pulled from GitHub.",
+    "attack": [
+      "T1110.001",
+      "T1078",
+      "T1021.004",
+      "T1136.001",
+      "T1098",
+      "T1003.008",
+      "T1105"
+    ]
   },
   "sherlocks/htb/Unit42_notes.md": {
     "section": "sherlocks",
@@ -156,7 +221,14 @@
       "timestomping",
       "jq"
     ],
-    "summary": "Sysmon log analysis of a malicious executable downloaded from Dropbox, including its connectivity check and timestomping."
+    "summary": "Sysmon log analysis of a malicious executable downloaded from Dropbox, including its connectivity check and timestomping.",
+    "attack": [
+      "T1204.002",
+      "T1105",
+      "T1219",
+      "T1070.006",
+      "T1016.001"
+    ]
   },
   "malware-analysis/phantom_ring/analysis.md": {
     "section": "malware",

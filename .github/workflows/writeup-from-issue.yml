@@ -1,8 +1,9 @@
 name: Write-up from issue form
 
-# When the repo owner submits (or edits) one of the write-up issue forms, this
-# writes the markdown file into the right folder, rebuilds the site's list and
-# opens a pull request. Merging the pull request publishes the write-up.
+# When the repo owner submits (or edits) one of the write-up or tool issue forms,
+# this writes the markdown file into the right folder, rebuilds the site's list
+# and opens a pull request. Merging the pull request publishes it. The comment
+# on the issue also lists the ATT&CK techniques mapped and suggested.
 
 on:
   issues:
@@ -23,6 +24,7 @@ jobs:
     if: github.event.issue.user.login == github.repository_owner && github.event.issue.state == 'open'
     runs-on: ubuntu-latest
     env:
+      PYTHONDONTWRITEBYTECODE: "1"
       GH_TOKEN: ${{ github.token }}
       ISSUE: ${{ github.event.issue.number }}
       BASE: ${{ github.event.repository.default_branch }}
@@ -48,9 +50,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -B "$BRANCH"
+          NOTES="$RUNNER_TEMP/attack_notes.md"
+          touch "$NOTES"
+          comment() { { echo "$1"; echo; cat "$NOTES"; } > "$RUNNER_TEMP/comment.md"; gh issue comment "$ISSUE" --body-file "$RUNNER_TEMP/comment.md"; }
           git add -A
           if git diff --cached --quiet; then
-            gh issue comment "$ISSUE" --body "The form matches what is already published in \`$FILE\`, so there is nothing to change."
+            comment "The form matches what is already published in \`$FILE\`, so there is nothing to change."
             exit 0
           fi
           git commit -m "$MODE write-up: $TITLE"
@@ -58,12 +63,12 @@ jobs:
 
           PR=$(gh pr list --head "$BRANCH" --state open --json url --jq '.[0].url // empty')
           if [ -n "$PR" ]; then
-            gh issue comment "$ISSUE" --body "Updated the pull request with your edit: $PR"
+            comment "Updated the pull request with your edit: $PR"
           else
             PR=$(gh pr create --base "$BASE" --head "$BRANCH" \
               --title "$MODE write-up: $TITLE" \
               --body "Created from the form in #$ISSUE. File: \`$FILE\`. Merging this publishes it on the site. Closes #$ISSUE")
-            gh issue comment "$ISSUE" --body "Pull request ready: $PR. File: \`$FILE\`. Merge it to publish. To change something first, edit this issue and the pull request updates itself."
+            comment "Pull request ready: $PR. File: \`$FILE\`. Merge it to publish. To change something first, edit this issue and the pull request updates itself."
           fi
 
       - name: Report a problem on the issue

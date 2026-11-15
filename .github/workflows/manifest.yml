@@ -8,6 +8,8 @@ on:
       - "sherlocks/**"
       - "malware/**"
       - "malware-analysis/**"
+      - "tools/**"
+      - "data/attack.json"
       - "data/writeup-meta.json"
       - "scripts/build_manifest.py"
 
@@ -17,6 +19,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
     steps:
       - uses: actions/checkout@v4
       - name: Rebuild data/writeups.js

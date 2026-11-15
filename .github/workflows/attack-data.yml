@@ -1,0 +1,64 @@
+name: Update ATT&CK data
+
+# Once a week, download MITRE's Enterprise ATT&CK bundle from
+# github.com/mitre-attack/attack-stix-data and rebuild data/attack.json and
+# data/attack-software.json. If anything changed (MITRE releases a new
+# version about twice a year), open a pull request so you can review it.
+# Run it by hand from the Actions tab with "Run workflow".
+
+on:
+  schedule:
+    - cron: "17 4 * * 1"        # Mondays 04:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: attack-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      GH_TOKEN: ${{ github.token }}
+      BASE: ${{ github.event.repository.default_branch }}
+      BRANCH: attack-data/update
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Rebuild ATT&CK data
+        id: build
+        run: |
+          python3 scripts/build_attack.py | tee "$RUNNER_TEMP/build.txt"
+          echo "summary=$(head -n 2 "$RUNNER_TEMP/build.txt" | tail -n 1)" >> "$GITHUB_OUTPUT"
+
+      - name: Open or update the pull request
+        env:
+          SUMMARY: ${{ steps.build.outputs.summary }}
+        run: |
+          if git diff --quiet -- data/attack.json data/attack-software.json; then
+            echo "ATT&CK data already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add data/attack.json data/attack-software.json
+          git commit -m "Update ATT&CK data: $SUMMARY"
+          git push --force origin "$BRANCH"
+          if [ -z "$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number // empty')" ]; then
+            {
+              echo "MITRE published new ATT&CK data: $SUMMARY."
+              echo
+              echo "Merging this updates the Techniques page. Check the build output below for IDs used by your write-ups or data/attack-keywords.json that MITRE renamed or removed."
+              echo
+              echo '```'
+              cat "$RUNNER_TEMP/build.txt"
+              echo '```'
+            } > "$RUNNER_TEMP/body.md"
+            gh pr create --base "$BASE" --head "$BRANCH" --title "Update ATT&CK data" --body-file "$RUNNER_TEMP/body.md"
+          fi

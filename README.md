@@ -17,18 +17,19 @@ The site is intentionally lightweight and easy to maintain: it is built with pla
 
 ## Features
 
-- Clean, dark-themed cybersecurity aesthetic
-- Searchable technique catalog
-- Sectioned content for tools, references, and walkthroughs
-- Expandable, card-based layout for easy browsing
-- Responsive design for desktop and mobile viewing
-- Zero dependency setup for GitHub Pages deployment
+- Write-up sections for CTF, Sherlocks (blue team) and Malware analysis, rendered from the markdown files in this repo
+- A tool inventory: what each tool does, who makes it, how to install it and which ATT&CK techniques it serves
+- A Techniques page built from MITRE ATT&CK Enterprise, grouped by phase, with every technique my write-ups and tools cover lit up on a pixel matrix
+- Every write-up and tool is tagged with ATT&CK technique IDs, linked both ways
+- Issue forms that turn into pull requests, with a bot that suggests ATT&CK techniques from the text
+- Pixel effects, an ambient background, light and dark themes; effects switch off for reduced motion
+- No build step: plain HTML, CSS and JavaScript on GitHub Pages
 
-## Adding a write-up
+## Adding a write-up or a tool
 
-Drop the `.md` file into `CTF/`, `sherlocks/` or `malware-analysis/` and push. A GitHub Action (`.github/workflows/manifest.yml`) scans the folders and rebuilds `data/writeups.js`, so the site picks the file up by itself. Do not edit `data/writeups.js` by hand.
+The easiest way is an issue form (below). To add one by hand, drop the `.md` file into `CTF/`, `sherlocks/`, `malware-analysis/` or `tools/` and push. A GitHub Action (`.github/workflows/manifest.yml`) rebuilds `data/writeups.js`, so the site picks it up. Do not edit `data/writeups.js` by hand.
 
-The title, platform, summary and status are guessed from the file. To set them yourself, put this at the very top of the `.md` file (the site hides it when it shows the write-up):
+Details come from front matter at the very top of the file (the site hides it):
 
 ```text
 ---
@@ -36,53 +37,80 @@ title: Cap
 platform: Hack The Box
 level: Easy
 status: complete
+attack: T1190, T1040, T1548
 tags: IDOR, pcap, Linux capabilities
 summary: One sentence for the list page.
 ---
 ```
 
-You can also set these fields in `data/writeup-meta.json`, keyed by file path. Files under 600 bytes are treated as "in progress" until you write more. To rebuild the list locally, run `python3 scripts/build_manifest.py`.
+Tools also take `creator`, `repo` (an https link), `license`, `category`, `platforms` and `software` (an ATT&CK S-number, such as S0521). You can also set any of these in `data/writeup-meta.json`, keyed by file path.
 
-## Submitting a write-up with a form
+## Submitting with a form
 
-Instead of committing a file, open the repo's **Issues** tab, click **New issue** and pick the CTF, Sherlock or Malware analysis form. Fill it in and submit. A GitHub Action (`.github/workflows/writeup-from-issue.yml`) then:
+Open **Issues → New issue** and pick the CTF, Sherlock, Malware analysis or Tool form. A GitHub Action (`.github/workflows/writeup-from-issue.yml`) then:
 
-1. writes the markdown file into the right folder, in a new folder named after the case
-   (`CTF/<platform>/<case>/README.md`, `sherlocks/<platform>/<case>/README.md` or `malware-analysis/<case>/README.md`),
-2. rebuilds `data/writeups.js`,
-3. opens a pull request and links it on the issue.
+1. writes the file into a new folder named after the case or tool
+   (`CTF/<platform>/<case>/README.md`, `sherlocks/<platform>/<case>/README.md`, `malware-analysis/<case>/README.md` or `tools/<tool>/README.md`),
+2. checks the ATT&CK technique IDs, replacing any that MITRE renamed,
+3. rebuilds `data/writeups.js` and opens a pull request,
+4. comments on the issue with the pull request link and ATT&CK suggestions read from your text. For a tool or malware family that ATT&CK lists as software (BloodHound, Mimikatz, Emotet...), it also lists the techniques ATT&CK links to it.
 
-Merging the pull request publishes the write-up and closes the issue. To change something before merging, edit the issue and the pull request updates itself. To edit a write-up that is already published, fill in "Existing file to replace" with its path and paste the full updated text.
+Merging the pull request publishes it. To change something first, edit the issue and the pull request updates itself. Only issues opened by the repo owner are acted on.
 
-Only issues opened by the repo owner are acted on.
+## Mapping to ATT&CK from the command line
+
+```bash
+python3 scripts/attack_map.py --find "brute force"        # look up technique IDs
+python3 scripts/attack_map.py CTF/HTB/Easy/cap.md         # suggest IDs for one file
+python3 scripts/attack_map.py --all                       # every file: mapped vs suggested
+```
+
+Suggestions come from ATT&CK's software list, from `data/attack-keywords.json` (commands and words such as `nmap` or `sudo -l`, which you can extend) and from technique names in the text. Keep only what you actually did or saw.
+
+## ATT&CK data
+
+`data/attack.json` (used by the site) and `data/attack-software.json` (used by the bot) are built from MITRE's own data in [mitre-attack/attack-stix-data](https://github.com/mitre-attack/attack-stix-data) by `scripts/build_attack.py`. A weekly Action (`.github/workflows/attack-data.yml`) rebuilds them and opens a pull request when MITRE publishes a new version; the pull request lists any IDs in your write-ups that MITRE renamed. To run it now, open **Actions → Update ATT&CK data → Run workflow**.
+
+## Previewing locally
+
+```bash
+python3 -m http.server 8000
+# then open http://localhost:8000
+```
 
 ## Repository Structure
 
 ```text
 .
-├── index.html              # Main landing page
-├── README.md               # Project overview and usage guide
-├── SECURITY.md             # Security policy and reporting guidance
-├── css/                    # Styling and layout assets
-│   ├── animations.css
-│   ├── components.css
-│   ├── layout.css
-│   └── theme.css
-├── js/                     # Front-end behavior and rendering logic
-│   ├── app.js
-│   ├── modal.js
-│   ├── nav.js
-│   ├── render.js
-│   ├── search.js
-│   └── theme.js
+├── index.html                  # Page shell: header, footer, effects canvases
+├── .nojekyll                   # Serve the .md files as they are on GitHub Pages
+├── css/                        # theme, layout, components, effects
+├── js/
+│   ├── app.js                  # Routing and rendering of every page
+│   ├── fx.js                   # Click effects, page wipe, pixel name, cursor readout
+│   ├── bg.js                   # Ambient background that keeps clear of text
+│   └── vendor/marked.min.js    # Markdown parser (MIT)
+├── fonts/                      # Jersey 15 pixel typeface (SIL Open Font License)
 ├── data/
-│   └── techniques.js       # Technique entries and metadata
-├── CTF/                    # CTF-related content and notes
-├── sherlocks/              # Research or investigation notes
-└── assets/                 # Optional images and supporting media
+│   ├── writeups.js             # GENERATED list of write-ups and tools
+│   ├── writeup-meta.json       # Optional details per file (titles, tags, ATT&CK IDs)
+│   ├── techniques.js           # My technique notes, each attached to ATT&CK IDs
+│   ├── attack.json             # GENERATED ATT&CK phases and techniques (site)
+│   ├── attack-software.json    # GENERATED ATT&CK software list (bot only)
+│   └── attack-keywords.json    # Words and commands mapped to techniques, for suggestions
+├── scripts/
+│   ├── build_manifest.py       # Rebuilds data/writeups.js from the folders
+│   ├── build_attack.py         # Rebuilds the ATT&CK data from MITRE
+│   ├── attack_map.py           # ATT&CK lookup and suggestions (bot and CLI)
+│   └── issue_to_writeup.py     # Turns an issue form into a markdown file
+├── .github/
+│   ├── ISSUE_TEMPLATE/         # CTF, Sherlock, Malware analysis and Tool forms
+│   └── workflows/              # manifest, writeup-from-issue, attack-data
+├── CTF/                        # CTF write-ups
+├── sherlocks/                  # Blue-team write-ups
+├── malware-analysis/           # Malware analysis write-ups
+└── tools/                      # Tool inventory, one folder per tool
 ```
-
-
 
 ## Contact
 

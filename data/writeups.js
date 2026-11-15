@@ -9,6 +9,14 @@ const WRITEUPS = [
     "path": "CTF/HTB/Easy/cap.md",
     "level": "Easy",
     "status": "complete",
+    "attack": [
+      "T1046",
+      "T1190",
+      "T1040",
+      "T1078",
+      "T1021.004",
+      "T1548"
+    ],
     "tags": [
       "IDOR",
       "pcap",
@@ -23,6 +31,15 @@ const WRITEUPS = [
     "path": "CTF/HTB/Easy/vaccine.md",
     "level": "Easy",
     "status": "complete",
+    "attack": [
+      "T1046",
+      "T1078.001",
+      "T1110.002",
+      "T1190",
+      "T1059.004",
+      "T1552.001",
+      "T1548.003"
+    ],
     "tags": [
       "FTP",
       "John",
@@ -38,6 +55,13 @@ const WRITEUPS = [
     "path": "CTF/HTB/Easy/three.md",
     "level": "Easy",
     "status": "complete",
+    "attack": [
+      "T1046",
+      "T1595.003",
+      "T1530",
+      "T1505.003",
+      "T1059.004"
+    ],
     "tags": [
       "vhost enumeration",
       "S3",
@@ -52,6 +76,10 @@ const WRITEUPS = [
     "path": "CTF/HTB/Easy/reactor.md",
     "level": "Easy",
     "status": "in progress",
+    "attack": [
+      "T1046",
+      "T1592.002"
+    ],
     "tags": [
       "Next.js",
       "recon"
@@ -65,6 +93,10 @@ const WRITEUPS = [
     "path": "CTF/HTB/Easy/orion.md",
     "level": "Easy",
     "status": "in progress",
+    "attack": [
+      "T1046",
+      "T1595.003"
+    ],
     "tags": [
       "nmap",
       "vhost"
@@ -78,6 +110,9 @@ const WRITEUPS = [
     "path": "CTF/Rootme/Network/FTP.md",
     "level": "Network",
     "status": "complete",
+    "attack": [
+      "T1040"
+    ],
     "tags": [
       "pcap",
       "FTP",
@@ -92,6 +127,11 @@ const WRITEUPS = [
     "path": "CTF/Breachlabs/track1.md",
     "level": "Levels 0 to 6",
     "status": "in progress",
+    "attack": [
+      "T1083",
+      "T1046",
+      "T1552.003"
+    ],
     "tags": [
       "Linux",
       "grep",
@@ -107,6 +147,10 @@ const WRITEUPS = [
     "path": "CTF/Overthewire/Banditlabs.md",
     "level": "Levels 0 to 8",
     "status": "complete",
+    "attack": [
+      "T1083",
+      "T1021.004"
+    ],
     "tags": [
       "Linux",
       "SSH",
@@ -121,6 +165,15 @@ const WRITEUPS = [
     "path": "sherlocks/THM/threat_hunting_sim.md",
     "level": "Threat hunting",
     "status": "complete",
+    "attack": [
+      "T1195.001",
+      "T1059.001",
+      "T1027.010",
+      "T1140",
+      "T1564.003",
+      "T1105",
+      "T1547.001"
+    ],
     "tags": [
       "Splunk",
       "Sysmon",
@@ -136,6 +189,9 @@ const WRITEUPS = [
     "path": "sherlocks/THM/soc_simulator.md",
     "level": "SOC triage",
     "status": "complete",
+    "attack": [
+      "T1566"
+    ],
     "tags": [
       "phishing",
       "alert triage",
@@ -150,6 +206,15 @@ const WRITEUPS = [
     "path": "sherlocks/htb/brutus.md",
     "level": "Easy",
     "status": "complete",
+    "attack": [
+      "T1110.001",
+      "T1078",
+      "T1021.004",
+      "T1136.001",
+      "T1098",
+      "T1003.008",
+      "T1105"
+    ],
     "tags": [
       "auth.log",
       "wtmp",
@@ -165,6 +230,13 @@ const WRITEUPS = [
     "path": "sherlocks/htb/Unit42_notes.md",
     "level": "Easy",
     "status": "complete",
+    "attack": [
+      "T1204.002",
+      "T1105",
+      "T1219",
+      "T1070.006",
+      "T1016.001"
+    ],
     "tags": [
       "Sysmon",
       "Windows",
@@ -199,5 +271,58 @@ const WRITEUPS = [
       "reversing"
     ],
     "summary": "Notes for the first crackme sample. The write-up has just been started."
+  },
+  {
+    "section": "tools",
+    "title": "Burp Suite",
+    "path": "tools/burp-suite/README.md",
+    "level": "Red team",
+    "status": "in progress",
+    "attack": [
+      "T1190",
+      "T1595.002"
+    ],
+    "tags": [
+      "Web",
+      "proxy",
+      "scanner"
+    ],
+    "summary": "Intercept, replay and fuzz HTTP and HTTPS traffic. The core tool for web application testing.",
+    "creator": "PortSwigger",
+    "repo": "https://portswigger.net/burp",
+    "license": "Commercial (free Community Edition)",
+    "category": "Web application testing",
+    "platforms": [
+      "Linux",
+      "Windows",
+      "macOS"
+    ]
+  },
+  {
+    "section": "tools",
+    "title": "Metasploit",
+    "path": "tools/metasploit/README.md",
+    "level": "Red team",
+    "status": "in progress",
+    "attack": [
+      "T1190",
+      "T1203",
+      "T1059"
+    ],
+    "tags": [
+      "Exploitation",
+      "post-exploitation",
+      "payloads"
+    ],
+    "summary": "Exploitation framework covering initial exploitation, post-exploitation and pivoting, with msfvenom for payloads.",
+    "creator": "Rapid7",
+    "repo": "https://github.com/rapid7/metasploit-framework",
+    "license": "BSD-3-Clause",
+    "category": "Exploitation framework",
+    "platforms": [
+      "Linux",
+      "Windows",
+      "macOS"
+    ]
   }
 ];

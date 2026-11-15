@@ -42,6 +42,7 @@
 .nav a[data-nav="ctf"][aria-current="page"]        { background: var(--magenta); }
 .nav a[data-nav="sherlocks"][aria-current="page"]  { background: var(--cyan); }
 .nav a[data-nav="malware"][aria-current="page"]    { background: var(--yellow); }
+.nav a[data-nav="tools"][aria-current="page"],
 .nav a[data-nav="techniques"][aria-current="page"] { background: var(--ink); color: var(--bg); }
 
 .controls { display: flex; gap: .5rem; }
@@ -96,7 +97,7 @@
 /* ----------- HOME: SECTION BLOCKS ----------- */
 .blocks {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.75rem;
   margin-bottom: 1.75rem;
 }
@@ -111,6 +112,10 @@
 }
 
 /* ----------- RESPONSIVE ----------- */
+@media (max-width: 1100px) {
+  .blocks { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 860px) {
   .blocks { grid-template-columns: 1fr; }
   .top { flex-wrap: wrap; gap: .5rem 1rem; }

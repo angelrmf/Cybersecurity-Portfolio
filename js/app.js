@@ -368,9 +368,15 @@
       return `<a href="${esc(url)}" ${url.startsWith('mailto:') ? '' : 'target="_blank" rel="noopener"'} data-p="link: ${esc(label)}">${esc(text)}</a>`;
     };
     const email = /^[^\s@<>"]+@[^\s@<>"]+\.[^\s@<>"]+$/.test(W.email || '') ? W.email : '';
-    const linkedin = isWeb(W.linkedin) ? W.linkedin : '';
+    const withScheme = u => (u && !/^[a-z]+:/i.test(u.trim()) ? 'https://' + u.trim() : (u || '').trim());
+    const linkedin = isWeb(withScheme(W.linkedin)) ? withScheme(W.linkedin) : '';
     const github = isWeb(W.github) ? W.github : '';
     const row = (k, v) => `<div class="who-row"><dt>${esc(k)}</dt><dd>${v}</dd></div>`;
+    // Every other field in data/whoami.js becomes a row, labelled with its name: add, remove or rename freely.
+    const SKIP = ['handle', 'email', 'linkedin', 'github', 'about'];
+    const label = k => k.charAt(0).toUpperCase() + k.slice(1).replace(/_/g, ' ');
+    const infoRows = Object.keys(W).filter(k => !SKIP.includes(k) && typeof W[k] === 'string' && W[k].trim())
+      .map(k => row(label(k), val(W[k], ''))).join('');
 
     view.innerHTML = `
       <h1 class="sr-only">whoami: ${esc(W.handle)}</h1>
@@ -380,10 +386,7 @@
         <div class="who-card">
           <p class="who-handle">${esc(W.handle)}<span>@portfolio</span></p>
           <dl>
-            ${row('Role', val(W.role, '[Your role]'))}
-            ${row('Focus', val(W.focus, '[Your focus]'))}
-            ${row('Location', val(W.location, '[City, country]'))}
-            ${row('Learning', val(W.learning, '[What you are studying]'))}
+            ${infoRows}
           </dl>
           <p class="who-sub">Contact</p>
           <dl>
